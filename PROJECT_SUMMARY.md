@@ -65,6 +65,7 @@ Not received yet: `new-website-playbook.md` and `security-checklist.md` (owner m
 |---|---|
 | 1. Research: birth sky numbers, licences | Done (`docs/BIRTH_SKY.md`, `docs/LICENSES.md`) |
 | 2. First full version | Built on branch `build/v1-sky-and-garden`. Sections working: hero, the minute, moon, days counter, Scorpio, songs (9), garden (24 flowers), letter. Placeholders: voice, gallery, letter words, flower memories. |
+| 2b. Scroll scenes | Built on branch `build/v2-scroll-scenes`. Pinned scenes driven by the scroll: name flies in, moon wanes from full (21 Oct) to her crescent, day counter counts up, Scorpio is drawn, songs slide in, flowers grow, lead text lights up word by word, stars streak when scrolling fast, night turns to dawn at the end. No packages. Pin lengths are in `tokens.css`. |
 | 3. Owner's content | Waiting for: photos, drawings, audios, letter, 24 memories, song picks |
 | 4. Deploy to Cloudflare Pages | Not done. Owner must connect the repo in Cloudflare. |
 
@@ -79,7 +80,8 @@ Not received yet: `new-website-playbook.md` and `security-checklist.md` (owner m
 
 - Real iPhone, real iPad, Safari, Firefox.
 - Screen reader, keyboard-only walk-through, colour contrast measurement.
-- Reduced-motion mode.
+- Smoothness of the scroll scenes on a real phone or iPad (only checked as still screenshots in Chrome).
+- Reduced-motion mode was loaded once (page shows final states, no pinned scenes) but not reviewed in detail.
 - The Cloudflare deployment itself.
 
 ## Open questions for the owner

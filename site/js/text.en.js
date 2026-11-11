@@ -31,13 +31,17 @@ export default {
 
   moon: {
     title: "Your first moon",
-    lead: "A thin, quiet crescent. It was not in the sky when you were born. It waited, and rose at 1:26 that night, just for you.",
+    lead: "Nine nights before you, the moon was full. It grew thinner each night, down to a quiet crescent. It was not in the sky when you were born. It waited, and rose at 1:26 that night, just for you.",
     facts: [
       { big: "34%", small: "of the moon was lit" },
       { big: "Waning crescent", small: "the phase of thinkers and dreamers, people say" },
       { big: "In Leo", small: "where your moon was shining" },
     ],
     alt: "The moon as a thin crescent, lit on its left side, about one third bright.",
+    full: "21 October 2002: the full moon",
+    nights: "{n} nights before you",
+    oneNight: "1 night before you",
+    yours: "30 October 2002: your moon",
   },
 
   days: {
@@ -55,7 +59,6 @@ export default {
 
   scorpio: {
     title: "Written in Scorpio",
-    lead: "Fifteen stars make your sign. Watch them join, one line at a time, like a drawing.",
     heart: "Antares, the heart of the Scorpion",
     note: "At 5:00 pm on your day, this heart was shining in the south-west. Nobody could see it. It was there anyway.",
     alt: "The constellation Scorpius: fifteen stars joined by a curved line shaped like a scorpion's tail.",

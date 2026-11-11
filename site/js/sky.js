@@ -18,6 +18,7 @@ export function startSky(canvas, reduceMotion) {
   const colours = ["--star", "--star", "--star-warm", "--star-cool"].map((name) => css.getPropertyValue(name).trim() || "#fff");
 
   let w = 0, h = 0, stars = [], shooting = null, nextShot = 4000, running = false;
+  let lastScroll = window.scrollY || 0, speed = 0; // how fast the page is scrolling, smoothed
 
   function build() {
     const ratio = Math.min(window.devicePixelRatio || 1, 2);
@@ -41,12 +42,21 @@ export function startSky(canvas, reduceMotion) {
   function draw(time) {
     ctx.clearRect(0, 0, w, h);
     const scroll = window.scrollY || 0;
+    speed += (scroll - lastScroll - speed) * 0.25;
+    lastScroll = scroll;
+    const streak = Math.max(-90, Math.min(90, speed * 1.4));
+    ctx.lineCap = "round";
     for (const s of stars) {
       const twinkle = reduceMotion ? 0.85 : 0.55 + 0.45 * Math.sin(s.phase + (time / 1000) * s.speed);
       let y = (s.y - scroll * (0.02 + s.depth * 0.07)) % h;
       if (y < 0) y += h;
       ctx.globalAlpha = twinkle * (0.45 + s.depth * 0.55);
       ctx.fillStyle = s.colour;
+      if (!reduceMotion && Math.abs(streak) > 2) { // scrolling fast: stars stretch into lines, like flying
+        ctx.strokeStyle = s.colour; ctx.lineWidth = s.r * 1.4;
+        ctx.beginPath(); ctx.moveTo(s.x, y); ctx.lineTo(s.x, y + streak * (0.25 + s.depth)); ctx.stroke();
+        continue;
+      }
       ctx.beginPath();
       ctx.arc(s.x, y, s.r, 0, 6.2832);
       ctx.fill();

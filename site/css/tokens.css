@@ -46,6 +46,12 @@
   --radius-pill: 999px;
   --tap: 2.75rem; /* 44px minimum touch size */
 
+  /* how long each pinned scene lasts while scrolling */
+  --pin-hero: 190vh;
+  --pin-moon: 260vh;
+  --pin-days: 210vh;
+  --pin-scorpio: 280vh;
+
   /* motion */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --slow: 1.4s;
@@ -60,6 +66,10 @@
   --night-2: #0a1030;
   --night-3: #17235a;
   --night-4: #2b2f77;
+  --dawn-1: #0b1238;
+  --dawn-2: #2a2468;
+  --dawn-3: #6a3f86;
+  --dawn-4: #a8557f;
   --sun-core: #fff6d8;
   --sun-halo: rgba(255, 196, 120, 0.85);
   --star: #ffffff;

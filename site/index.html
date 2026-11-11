@@ -20,9 +20,20 @@
   <div class="sky" aria-hidden="true">
     <div class="sky__layer sky__layer--golden"></div>
     <div class="sky__layer sky__layer--night"></div>
+    <div class="sky__layer sky__layer--dawn"></div>
     <div class="sky__sun"></div>
     <canvas class="sky__stars" id="stars"></canvas>
   </div>
+
+  <svg class="defs" aria-hidden="true" focusable="false">
+    <defs>
+      <g id="moonShape">
+        <circle class="moon__dark" cx="100" cy="100" r="80"></circle>
+        <path class="moon__lit" id="moonLit" d=""></path>
+      </g>
+    </defs>
+  </svg>
+  <div class="progress" aria-hidden="true"></div>
 
   <header class="top">
     <button class="switch" id="themeSwitch" type="button" role="switch" aria-checked="true">
@@ -35,14 +46,16 @@
   </header>
 
   <main id="story">
-    <section class="hero" aria-labelledby="heroName">
-      <svg class="hero__moon" viewBox="0 0 200 200" aria-hidden="true">
-        <use href="#moonShape"></use>
-      </svg>
-      <p class="hero__kicker hand" data-t="hero.kicker"></p>
-      <h1 class="hero__name" id="heroName" data-t="hero.name"></h1>
-      <p class="hero__line" data-t="hero.line"></p>
-      <p class="hero__scroll" data-t="hero.scroll"></p>
+    <section class="pin pin--hero" aria-labelledby="heroName">
+      <div class="pin__stick hero" id="heroScene">
+        <svg class="hero__moon" viewBox="0 0 200 200" aria-hidden="true">
+          <use href="#moonShape"></use>
+        </svg>
+        <p class="hero__kicker hand" data-t="hero.kicker"></p>
+        <h1 class="hero__name" id="heroName" data-t="hero.name"></h1>
+        <p class="hero__line" data-t="hero.line"></p>
+        <p class="hero__scroll" data-t="hero.scroll"></p>
+      </div>
     </section>
 
     <section class="block reveal" aria-labelledby="momentTitle">
@@ -52,46 +65,49 @@
       <p class="hand hint" data-t="moment.hint"></p>
     </section>
 
-    <section class="block block--split reveal" aria-labelledby="moonTitle">
-      <div class="moonwrap">
-        <svg class="bigmoon" viewBox="0 0 200 200" role="img" aria-labelledby="moonAlt">
-          <title id="moonAlt" data-t="moon.alt"></title>
-          <defs>
-            <g id="moonShape">
-              <circle class="moon__dark" cx="100" cy="100" r="80"></circle>
-              <path class="moon__lit" id="moonLit" d=""></path>
-            </g>
-          </defs>
-          <use href="#moonShape"></use>
-        </svg>
-      </div>
-      <div>
+    <section class="pin pin--moon" aria-labelledby="moonTitle">
+      <div class="pin__stick" id="moonScene">
+        <div class="moonwrap">
+          <svg class="bigmoon" viewBox="0 0 200 200" role="img" aria-labelledby="moonAlt">
+            <title id="moonAlt" data-t="moon.alt"></title>
+            <circle class="moon__dark" cx="100" cy="100" r="80"></circle>
+            <path class="moon__lit" id="moonScrub" d=""></path>
+          </svg>
+        </div>
+        <p class="hand moon__when" id="moonWhen" aria-hidden="true"></p>
         <h2 id="moonTitle" data-t="moon.title"></h2>
-        <p class="lead" data-t="moon.lead"></p>
-        <ul class="facts facts--stack" data-facts="moon.facts"></ul>
       </div>
     </section>
+    <div class="block block--after reveal">
+      <p class="lead" data-t="moon.lead"></p>
+      <ul class="facts" data-facts="moon.facts"></ul>
+    </div>
 
-    <section class="block block--wide block--center reveal" aria-labelledby="daysTitle">
-      <h2 id="daysTitle" data-t="days.title"></h2>
-      <p class="lead" data-t="days.lead"></p>
-      <p class="bignumber"><span id="daysAlive">0</span> <span class="bignumber__unit" data-t="days.unit"></span></p>
-      <p class="hand" data-t="days.and"></p>
+    <section class="pin pin--days" aria-labelledby="daysTitle">
+      <div class="pin__stick" id="daysScene">
+        <h2 id="daysTitle" data-t="days.title"></h2>
+        <p class="lead" data-t="days.lead"></p>
+        <p class="bignumber"><span id="daysAlive">0</span> <span class="bignumber__unit" data-t="days.unit"></span></p>
+        <p class="hand" data-t="days.and"></p>
+      </div>
+    </section>
+    <div class="block block--wide block--after reveal">
       <ul class="facts facts--four">
         <li class="fact"><span class="fact__big" id="hoursAlive">0</span><span class="fact__small" data-t="days.stats.hours"></span></li>
         <li class="fact"><span class="fact__big" id="moonsAlive">0</span><span class="fact__small" data-t="days.stats.moons"></span></li>
         <li class="fact"><span class="fact__big" id="tripsAlive">0</span><span class="fact__small" data-t="days.stats.trips"></span></li>
         <li class="fact"><span class="fact__big" id="daysToNext">0</span><span class="fact__small" data-t="days.stats.next"></span></li>
       </ul>
-    </section>
+    </div>
 
-    <section class="block block--center reveal" aria-labelledby="scorpioTitle">
-      <h2 id="scorpioTitle" data-t="scorpio.title"></h2>
-      <p class="lead" data-t="scorpio.lead"></p>
-      <svg class="scorpio" id="scorpio" viewBox="0 0 600 520" role="img" aria-labelledby="scorpioAlt">
-        <title id="scorpioAlt" data-t="scorpio.alt"></title>
-      </svg>
-      <p class="hand" data-t="scorpio.note"></p>
+    <section class="pin pin--scorpio" aria-labelledby="scorpioTitle">
+      <div class="pin__stick" id="scorpioScene">
+        <h2 id="scorpioTitle" data-t="scorpio.title"></h2>
+        <svg class="scorpio" id="scorpio" viewBox="0 0 600 520" role="img" aria-labelledby="scorpioAlt">
+          <title id="scorpioAlt" data-t="scorpio.alt"></title>
+        </svg>
+        <p class="hand scorpio__note" data-t="scorpio.note"></p>
+      </div>
     </section>
 
     <section class="block reveal" aria-labelledby="songsTitle">

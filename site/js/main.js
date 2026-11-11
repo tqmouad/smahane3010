@@ -67,6 +67,18 @@ function moonPath(lit, waning) {
 }
 $("moonLit").setAttribute("d", moonPath(MOON_LIT, MOON_WANING));
 
+// The moon was full 9.4 days before she was born, then waned to 34%.
+const NIGHTS_FROM_FULL = 9.4;
+const FINAL_ANGLE = Math.acos(2 * MOON_LIT - 1);
+function showMoon(p) { // p goes from 0 (full moon) to 1 (her moon)
+  const t = Math.min(1, p / 0.85);
+  const lit = (1 + Math.cos(t * FINAL_ANGLE)) / 2;
+  $("moonScrub").setAttribute("d", moonPath(Math.min(lit, 0.999), MOON_WANING));
+  const nights = Math.round(NIGHTS_FROM_FULL * (1 - t));
+  $("moonWhen").textContent =
+    t <= 0.02 ? T.moon.full : nights > 1 ? fill(T.moon.nights, { n: nights }) : nights === 1 ? T.moon.oneNight : T.moon.yours;
+}
+
 // ---------- counting her days ----------
 function lifeNumbers(now) {
   const ms = now - BIRTH;
@@ -86,21 +98,18 @@ function lifeNumbers(now) {
     daysToNext: Math.round((next - today) / 86400000),
   };
 }
-function showNumbers(scale) {
+let daysShown = 1; // 0 to 1 while the big number counts up with the scroll
+function showNumbers() {
   const n = lifeNumbers(Date.now());
-  for (const id in n) $(id).textContent = nf.format(Math.round(n[id] * scale));
+  for (const id in n) $(id).textContent = nf.format(id === "daysAlive" ? Math.round(n[id] * daysShown) : n[id]);
 }
-function countUp() {
-  if (reduceMotion) { showNumbers(1); return; }
-  const start = performance.now(), length = 2600;
-  (function step(t) {
-    const p = Math.min(1, (t - start) / length);
-    showNumbers(1 - Math.pow(1 - p, 4));
-    if (p < 1) requestAnimationFrame(step);
-  })(start);
+function showDays(p) {
+  const t = Math.min(1, p / 0.8);
+  daysShown = 1 - Math.pow(1 - t, 3);
+  showNumbers();
 }
-showNumbers(1);
-setInterval(() => showNumbers(1), 60000);
+showNumbers();
+setInterval(showNumbers, 60000);
 
 // ---------- Scorpio ----------
 // [right ascension in hours, declination in degrees, size]. Positions are approximate.
@@ -130,10 +139,12 @@ function drawScorpio(target) {
   ]);
   const line = (order, cls) => {
     const d = order.map((i, n) => (n ? "L" : "M") + pts[i][0].toFixed(1) + "," + pts[i][1].toFixed(1)).join(" ");
-    target.append(svg("path", { d, class: "scorpio__line " + cls, pathLength: 1 }));
+    const path = svg("path", { d, class: "scorpio__line " + cls, pathLength: 1 });
+    target.append(path);
+    return path;
   };
-  line([0, 1, 2], "scorpio__line--head");
-  line([1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "scorpio__line--body");
+  const head = line([0, 1, 2], "scorpio__line--head");
+  const body = line([1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "scorpio__line--body");
   pts.forEach(([x, y], i) => {
     const star = svg("circle", {
       cx: x.toFixed(1), cy: y.toFixed(1), r: SCORPIUS[i][2],
@@ -145,8 +156,12 @@ function drawScorpio(target) {
   const label = svg("text", { x: (pts[HEART][0] - 22).toFixed(1), y: (pts[HEART][1] + 8).toFixed(1), "text-anchor": "end", class: "scorpio__label" });
   label.textContent = T.scorpio.heart;
   target.append(label);
+  return (p) => { // the scroll draws the lines
+    head.style.strokeDashoffset = clamp(1 - p * 7);
+    body.style.strokeDashoffset = clamp(1 - (p - 0.1) * 1.4);
+  };
 }
-drawScorpio($("scorpio"));
+const showScorpio = drawScorpio($("scorpio"));
 
 // ---------- songs ----------
 T.songs.list.forEach((song) => {
@@ -194,6 +209,7 @@ function makeFlower(n) {
   return s;
 }
 const memory = $("memory");
+const flowers = [];
 const totalFlowers = lifeNumbers(Date.now()).tripsAlive;
 for (let n = 1; n <= totalFlowers; n++) {
   const year = BIRTH_YEAR + n;
@@ -205,7 +221,6 @@ for (let n = 1; n <= totalFlowers; n++) {
   button.append(makeFlower(n), el("span", "flower__year", String(year)));
   button.addEventListener("click", () => {
     $("memoryFlower").replaceChildren(makeFlower(n));
-    $("memoryFlower").classList.add("is-in");
     $("memoryTitle").textContent = fill(T.garden.year, { n });
     $("memoryYear").textContent = String(year);
     $("memoryText").textContent = T.garden.memories[n - 1] || fill(T.garden.empty, { year });
@@ -213,6 +228,7 @@ for (let n = 1; n <= totalFlowers; n++) {
   });
   li.append(button);
   $("garden").append(li);
+  flowers.push(button);
 }
 memory.addEventListener("click", (e) => { if (e.target === memory) memory.close(); });
 $("memoryClose").addEventListener("click", () => memory.close());
@@ -228,18 +244,67 @@ for (let i = 0; i < 44; i++) {
 for (let i = 0; i < 3; i++) $("gallery").append(el("li", "frame", T.gallery.placeholder));
 T.letter.body.forEach((p) => $("letter").append(el("p", null, p)));
 
-// ---------- show each part as it scrolls into view ----------
-const daysBlock = $("daysTitle").parentElement;
-if ("IntersectionObserver" in window) {
-  const seen = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add("is-in");
-      if (entry.target === daysBlock) countUp();
-      seen.unobserve(entry.target);
-    });
-  }, { threshold: 0.18 });
-  document.querySelectorAll(".reveal").forEach((node) => seen.observe(node));
-} else {
-  document.querySelectorAll(".reveal").forEach((node) => node.classList.add("is-in"));
+// ---------- scroll scenes ----------
+// Each tracked thing gets a number from 0 to 1 that follows the scroll.
+const tracked = [];
+const track = (node, mode, apply) => tracked.push({ node, mode, apply, last: null });
+const setVar = (node, name) => (p) => node.style.setProperty(name, p);
+
+function pinScene(id, extra) {
+  const scene = $(id);
+  track(scene.parentElement, "pin", (p) => { scene.style.setProperty("--p", p); if (extra) extra(p); });
 }
+pinScene("heroScene");
+pinScene("moonScene", showMoon);
+pinScene("daysScene", showDays);
+pinScene("scorpioScene", showScorpio);
+
+document.querySelectorAll(".reveal").forEach((block) => {
+  track(block, "in", setVar(block, "--in"));
+  track(block, "out", setVar(block, "--out"));
+});
+document.querySelectorAll(".reveal .lead").forEach((lead) => { // split into words that light up one by one
+  const words = lead.textContent.split(" ");
+  lead.textContent = "";
+  words.forEach((word, i) => {
+    const span = el("span", "w", word);
+    span.style.setProperty("--w", i);
+    lead.append(span, i < words.length - 1 ? " " : "");
+  });
+  lead.style.setProperty("--n", words.length);
+  track(lead, "read", setVar(lead, "--lp"));
+});
+document.querySelectorAll(".song").forEach((song) => track(song, "in", setVar(song, "--p")));
+flowers.forEach((flower) => {
+  const stem = flower.querySelector(".flower__stem");
+  track(flower, "in", (p) => { flower.style.setProperty("--p", p); stem.style.strokeDashoffset = clamp(1 - p * 1.8); });
+});
+
+function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+function measure(t, vh) {
+  const r = t.node.getBoundingClientRect();
+  if (t.mode === "pin") return clamp(-r.top / Math.max(1, r.height - vh));
+  if (t.mode === "in") return clamp((vh * 0.98 - r.top) / (vh * 0.34));
+  if (t.mode === "read") return clamp((vh * 0.92 - r.top) / (vh * 0.42));
+  return clamp(1 - r.bottom / (vh * 0.28)); // "out"
+}
+function update() {
+  const vh = window.innerHeight;
+  for (const t of tracked) {
+    const p = reduceMotion ? (t.mode === "out" ? 0 : 1) : Math.round(measure(t, vh) * 1000) / 1000;
+    if (p !== t.last) { t.last = p; t.apply(p); }
+  }
+  const room = document.documentElement.scrollHeight - vh;
+  const page = room > 0 ? clamp(window.scrollY / room) : 0;
+  root.style.setProperty("--page", page.toFixed(4));
+  root.style.setProperty("--dawn", clamp((page - 0.8) / 0.2).toFixed(3)); // the night ends in dawn
+}
+let waiting = false;
+function requestUpdate() {
+  if (waiting) return;
+  waiting = true;
+  requestAnimationFrame(() => { waiting = false; update(); });
+}
+window.addEventListener("scroll", requestUpdate, { passive: true });
+window.addEventListener("resize", requestUpdate);
+update();
