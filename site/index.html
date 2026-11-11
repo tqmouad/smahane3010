@@ -81,6 +81,10 @@
     <div class="block block--after reveal">
       <p class="lead" data-t="moon.lead"></p>
       <ul class="facts" data-facts="moon.facts"></ul>
+      <figure class="quote">
+        <blockquote class="quote__ar" lang="ar" dir="rtl" data-t="moon.quote"></blockquote>
+        <figcaption class="hand" data-t="moon.quoteMeaning"></figcaption>
+      </figure>
     </div>
 
     <section class="pin pin--days" aria-labelledby="daysTitle">
@@ -114,7 +118,6 @@
       <h2 id="songsTitle" data-t="songs.title"></h2>
       <p class="lead" data-t="songs.lead"></p>
       <ul class="songs" id="songs"></ul>
-      <p class="hand hint" data-t="songs.more"></p>
     </section>
 
     <section class="block block--wide reveal" aria-labelledby="gardenTitle">
@@ -123,11 +126,10 @@
       <ul class="garden" id="garden"></ul>
     </section>
 
-    <section class="block reveal" aria-labelledby="voiceTitle">
+    <section class="block reveal" id="voice" aria-labelledby="voiceTitle" hidden>
       <h2 id="voiceTitle" data-t="voice.title"></h2>
       <p class="lead" data-t="voice.lead"></p>
       <div class="voice" aria-hidden="true" id="voiceBars"></div>
-      <p class="placeholder" data-t="voice.placeholder"></p>
     </section>
 
     <section class="block reveal" aria-labelledby="galleryTitle">
@@ -136,10 +138,19 @@
       <ul class="gallery" id="gallery"></ul>
     </section>
 
+    <section class="block block--center reveal" aria-labelledby="portraitTitle">
+      <h2 id="portraitTitle" data-t="portrait.title"></h2>
+      <div class="portrait" id="portrait"></div>
+      <p class="hand" data-t="portrait.line"></p>
+    </section>
+
     <section class="block block--letter reveal" aria-labelledby="letterTitle">
       <h2 id="letterTitle" data-t="letter.title"></h2>
       <div class="letter" id="letter"></div>
       <p class="letter__sign hand" data-t="letter.sign"></p>
+      <svg class="signature" id="signature" viewBox="0 0 300 120" role="img" aria-labelledby="signatureAlt">
+        <title id="signatureAlt" data-t="letter.signatureAlt"></title>
+      </svg>
     </section>
   </main>
 
@@ -154,6 +165,11 @@
     <p class="hand" id="memoryYear"></p>
     <p id="memoryText"></p>
     <p class="memory__close"><button class="btn" id="memoryClose" type="button" data-t="garden.close"></button></p>
+  </dialog>
+
+  <dialog class="viewer" id="viewer">
+    <img id="viewerImage" src="" alt="">
+    <p class="viewer__close"><button class="btn" id="viewerClose" type="button" data-t="gallery.close"></button></p>
   </dialog>
 
   <noscript><p class="noscript">This page needs JavaScript to show its sky.</p></noscript>

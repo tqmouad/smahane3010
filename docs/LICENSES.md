@@ -42,3 +42,11 @@ Fonts are stored inside the site (self-hosted), so no outside font service is ca
 | Song audio or video | Playing the songs | Songs are copyrighted. Plan: link out to official sources, never host files. Embedding terms not read yet. |
 | Spacetoon songs and characters | Cartoon corner | Copyrighted. Plan: our own original art in that spirit, plus a link out. |
 | Her voice audios, photos, drawings, letter | Personal sections | Belong to her and the owner. Owner confirmed she is happy for them to be used. |
+
+## Her art and portrait (added 2026-11-11)
+
+| Item | Where | Whose it is | Notes |
+|---|---|---|---|
+| Six drawings (`two-faces`, `skull`, `eyes-pencil`, `moon-in-your-eyes`, `framed-pair`, `fighters`) | `site/img/` | Smahane's own work, sent by the owner | Resized. The first one was a screenshot; its two app badges were painted out. `fighters` is her fan art of characters owned by someone else: fine on a private gift, remove it if the site ever carries ads. |
+| Portrait (`portrait.jpg`) | `site/img/` | A portrait of Smahane, sent by the owner | Who made the portrait was not asked. Private gift only. |
+| Arabic line under the moon | `site/js/text.en.js` | Copied from the writing on her own framed drawing | Not checked whether the line is her own words or a quote from a poem or song. |

@@ -77,7 +77,14 @@
   --star-cool: #bcd4ff;
   --antares: #ff8f70;
 
-  /* flower colours (same in both skies) */
+  /* paper behind her drawings */
+  --paper: #f4efe4;
+  --paper-ink: #1d1642;
+
+  /* flowers are ink lines, like her art; set a colour here to fill the petals */
+  --petal-fill: none;
+
+  /* old petal colours (not used while --petal-fill is none) */
   --petal-1: #f29bb2;
   --petal-2: #f6c97a;
   --petal-3: #c9a7f5;

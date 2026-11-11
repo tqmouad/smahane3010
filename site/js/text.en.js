@@ -42,6 +42,8 @@ export default {
     nights: "{n} nights before you",
     oneNight: "1 night before you",
     yours: "30 October 2002: your moon",
+    quote: "وليس في الأرض قمراً كالذي في عيناك",
+    quoteMeaning: "\u201cThere is no moon on earth like the one in your eyes.\u201d You wrote it. It is true about you.",
   },
 
   days: {
@@ -69,7 +71,6 @@ export default {
     lead: "These songs were in the US top ten in the week you were born.",
     listen: "Find it",
     listenAria: "Find {title} by {artist} on YouTube (opens a new tab)",
-    more: "More songs are coming to this list.",
     list: [
       { title: "Dilemma", artist: "Nelly ft. Kelly Rowland", tag: "Number 1 that week" },
       { title: "Hey Ma", artist: "Cam'ron" },
@@ -90,33 +91,60 @@ export default {
     year: "Year {n}",
     close: "Close",
     // One memory per year, first to last. Empty ones show the line below.
-    empty: "A memory from {year} will be written here.",
     memories: [],
+    // Shown when a year has no memory of its own yet.
+    wishes: [
+      "The sky was lucky to have you in {year}.",
+      "In {year}, the world got a little brighter because of you.",
+      "{year}: one more trip around the sun, with you on board.",
+      "Somewhere in {year}, you smiled, and a star took notes.",
+      "{year} was a good year. You were in it.",
+      "In {year}, you were already becoming you.",
+    ],
   },
 
   voice: {
     title: "Your voice, in bloom",
-    lead: "Soon: your own voice, turned into flowers and soft notes.",
-    placeholder: "Her audio goes here",
+    lead: "Your own voice, turned into flowers and soft notes.",
+    files: [], // audio files go here later; the section stays hidden while this is empty
   },
 
   gallery: {
     title: "The artist's wall",
-    lead: "The best drawings in this universe are yours.",
-    placeholder: "Her drawing goes here",
+    lead: "The best drawings in this universe are yours, Skyhane.",
+    open: "Open this drawing bigger",
+    close: "Close",
+    list: [
+      { file: "two-faces.jpg", w: 960, h: 1200, alt: "Two faces tied together by loops of black ink." },
+      { file: "moon-in-your-eyes.jpg", w: 1015, h: 1200, alt: "A framed drawing of two eyes, with Arabic writing that says: there is no moon on earth like the one in your eyes." },
+      { file: "framed-pair.jpg", w: 1170, h: 1082, alt: "Two framed ink drawings of faces. One says: she never looked nice, she looked like art." },
+      { file: "eyes-pencil.jpg", w: 1170, h: 995, alt: "A pencil drawing of two eyes under strong eyebrows." },
+      { file: "skull.jpg", w: 1170, h: 1155, alt: "A skull made of fast black ink lines." },
+      { file: "fighters.jpg", w: 840, h: 1200, alt: "A clean line drawing of two anime fighters." },
+    ],
+  },
+
+  portrait: {
+    title: "And this is you",
+    line: "Of everything under this sky, this is my favourite view.",
+    art: { file: "portrait.jpg", w: 1124, h: 1200, alt: "An ink portrait of Smahane. Her head is tilted and she is looking right at you." },
   },
 
   letter: {
     title: "One last thing",
     body: [
-      "This letter is waiting for its words.",
-      "They will be written here, by the one who made this sky for you.",
+      "My Smahane,",
+      "You are the first person I want to tell everything to, the good news and the silly news. I don't know the right word for what you are to me. So I just say \u201cmy Smahane\u201d.",
+      "With you, I can laugh at nothing, talk about everything, and be quiet without feeling strange.",
+      "So I made you a small sky. Look at it when the day is hard. I am always on your side.",
+      "Stay close. The universe is more fun with you in it.",
     ],
-    sign: "Happy birthday, Smahane.",
+    sign: "Yours, under every sky,",
+    signatureAlt: "A signature with no name: two small knots of ink, tied together by one long line.",
   },
 
   footer: {
-    line: "Made with love, under a waning crescent.",
+    line: "Happy birthday, Smahane.",
     facts: "Sky facts were calculated for Beni Mellal, 30 October 2002, 5:00 pm.",
   },
 

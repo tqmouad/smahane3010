@@ -66,7 +66,8 @@ Not received yet: `new-website-playbook.md` and `security-checklist.md` (owner m
 | 1. Research: birth sky numbers, licences | Done (`docs/BIRTH_SKY.md`, `docs/LICENSES.md`) |
 | 2. First full version | Built on branch `build/v1-sky-and-garden`. Sections working: hero, the minute, moon, days counter, Scorpio, songs (9), garden (24 flowers), letter. Placeholders: voice, gallery, letter words, flower memories. |
 | 2b. Scroll scenes | Built on branch `build/v2-scroll-scenes`. Pinned scenes driven by the scroll: name flies in, moon wanes from full (21 Oct) to her crescent, day counter counts up, Scorpio is drawn, songs slide in, flowers grow, lead text lights up word by word, stars streak when scrolling fast, night turns to dawn at the end. No packages. Pin lengths are in `tokens.css`. |
-| 3. Owner's content | Waiting for: photos, drawings, audios, letter, 24 memories, song picks |
+| 2c. Letter, wall, portrait | Built on branch `build/v3-letter-gallery`. Letter (A2 English, half friend half love, approved by owner), signature with no name (two ink knots tied by one line, drawn by the scroll), her six drawings in `site/img/` with tap-to-enlarge, her portrait as its own scene, her Arabic moon line under the moon facts, flowers redrawn as ink lines to match her art ("my ink is black"). Voice section is hidden until audio files are listed in `text.en.js`. Empty flower memories show a gentle default line. |
+| 3. Owner's content | Received: letter, six drawings, portrait. Still waiting for: audios, flower memories, extra song picks (all optional) |
 | 4. Deploy to Cloudflare Pages | Not done. Owner must connect the repo in Cloudflare. |
 
 ## Checked so far (on 2026-11-11, in Chrome only)
@@ -86,6 +87,6 @@ Not received yet: `new-website-playbook.md` and `security-checklist.md` (owner m
 
 ## Open questions for the owner
 
-1. Which Arabic / Moroccan / cartoon songs to add (owner to name them).
-2. The 24 memories, the letter, photos, drawings, audios.
+1. Optional extras: songs to add, flower memories, audios.
+2. Owner did not choose a signature idea or confirm the ink flowers; both were chosen for him and can be changed (`--petal-fill` in `tokens.css` brings colour back).
 3. Please send `new-website-playbook.md` and `security-checklist.md` if they exist.

@@ -407,3 +407,45 @@ h2 {
   .pin { height: auto; }
   .pin__stick { position: static; height: auto; padding-block: var(--space-section); }
 }
+
+/* ---------- ink flowers, her wall, the letter's signature ---------- */
+
+.flower .petal { fill: var(--petal-fill); stroke: var(--ink); stroke-width: 1.1; opacity: 0.9; }
+.flower__stem { stroke: var(--ink); stroke-width: 1.6; }
+.flower__leaf { fill: none; stroke: var(--ink); stroke-width: 1.2; }
+.flower__heart { fill: var(--accent); }
+
+.quote { margin: var(--space-4) 0 0; text-align: center; }
+.quote__ar { margin: 0 0 var(--space-1); font-size: clamp(1.5rem, 5vw, 2.1rem); line-height: 1.7; color: var(--ink); }
+
+.gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3) var(--space-2); align-items: center; }
+@media (min-width: 48rem) { .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4) var(--space-3); } }
+.frame {
+  aspect-ratio: auto; display: block; width: 100%; padding: var(--space-1);
+  font: inherit; cursor: pointer;
+  border: 1px solid var(--line); border-radius: 0.5rem; background: var(--paper);
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.35);
+  transition: transform var(--medium) var(--ease), box-shadow var(--medium) var(--ease);
+}
+.frame img { display: block; width: 100%; height: auto; border-radius: 0.2rem; }
+.gallery li:nth-child(odd) .frame { transform: rotate(-2deg); }
+.gallery li:nth-child(even) .frame { transform: rotate(1.6deg); }
+.gallery li .frame:hover, .gallery li .frame:focus-visible { transform: rotate(0deg) scale(1.04); box-shadow: 0 0 2.5rem var(--glow); }
+
+.viewer {
+  max-width: min(100% - 1.5rem, 60rem); max-height: calc(100% - 1.5rem); padding: var(--space-2);
+  background: var(--paper); border: 0; border-radius: 0.6rem; text-align: center;
+}
+.viewer::backdrop { background: rgba(3, 4, 15, 0.82); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.viewer[open] { animation: rise 0.5s var(--ease); }
+.viewer img { display: block; max-width: 100%; max-height: 76vh; width: auto; height: auto; margin: 0 auto; }
+.viewer__close { margin-top: var(--space-2); }
+.viewer .btn { color: var(--paper-ink); border-color: var(--paper-ink); }
+
+.signature { display: block; width: min(70%, 15rem); height: auto; margin: var(--space-1) 0 0 auto; overflow: visible; }
+.signature__line { fill: none; stroke: var(--ink); stroke-width: 0.9; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+
+.portrait { width: min(100%, 22rem); margin: var(--space-2) auto var(--space-3); }
+.portrait .frame { transform: rotate(-1.5deg); }
+.portrait .frame:hover, .portrait .frame:focus-visible { transform: rotate(0deg) scale(1.03); box-shadow: 0 0 2.5rem var(--glow); }
+.signature__line { stroke-width: 0.7; }

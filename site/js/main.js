@@ -199,10 +199,13 @@ function makeFlower(n) {
   s.append(svg("path", { d: `M50,108 C${68 + lean},100 74,88 ${76 + lean},82 C62,84 54,94 50,108 Z`, class: "flower__leaf" }));
   const head = svg("g", { class: "flower__head" });
   for (let i = 0; i < petals; i++) {
-    head.append(svg("ellipse", {
-      cx: 50, cy: 52 - long * 0.62, rx: wide.toFixed(1), ry: (long * 0.62).toFixed(1),
-      transform: `rotate(${((360 / petals) * i).toFixed(1)} 50 52)`, class: "petal-" + colour,
-    }));
+    for (let pass = 0; pass < 2; pass++) { // each petal is drawn twice, a little off, like a quick ink sketch
+      head.append(svg("ellipse", {
+        cx: (50 + pass * (rnd() - 0.5) * 3).toFixed(1), cy: (52 - long * 0.62).toFixed(1),
+        rx: (wide + pass * (rnd() - 0.3) * 2).toFixed(1), ry: (long * 0.62 + pass * rnd() * 2).toFixed(1),
+        transform: `rotate(${((360 / petals) * i + pass * (rnd() - 0.5) * 9).toFixed(1)} 50 52)`, class: "petal petal-" + colour,
+      }));
+    }
   }
   head.append(svg("circle", { cx: 50, cy: 52, r: (5 + rnd() * 3).toFixed(1), class: "flower__heart" }));
   s.append(head);
@@ -223,7 +226,7 @@ for (let n = 1; n <= totalFlowers; n++) {
     $("memoryFlower").replaceChildren(makeFlower(n));
     $("memoryTitle").textContent = fill(T.garden.year, { n });
     $("memoryYear").textContent = String(year);
-    $("memoryText").textContent = T.garden.memories[n - 1] || fill(T.garden.empty, { year });
+    $("memoryText").textContent = T.garden.memories[n - 1] || fill(T.garden.wishes[n % T.garden.wishes.length], { year });
     memory.showModal();
   });
   li.append(button);
@@ -233,16 +236,77 @@ for (let n = 1; n <= totalFlowers; n++) {
 memory.addEventListener("click", (e) => { if (e.target === memory) memory.close(); });
 $("memoryClose").addEventListener("click", () => memory.close());
 
-// ---------- voice, gallery, letter (waiting for her things) ----------
-const bars = seeded(3010);
-for (let i = 0; i < 44; i++) {
-  const bar = el("span");
-  bar.style.setProperty("--i", i);
-  bar.style.setProperty("--h", (0.2 + bars() * 0.8).toFixed(2));
-  $("voiceBars").append(bar);
+// ---------- voice (hidden until audio files are added) ----------
+if (T.voice.files.length) {
+  $("voice").hidden = false;
+  const bars = seeded(3010);
+  for (let i = 0; i < 44; i++) {
+    const bar = el("span");
+    bar.style.setProperty("--i", i);
+    bar.style.setProperty("--h", (0.2 + bars() * 0.8).toFixed(2));
+    $("voiceBars").append(bar);
+  }
 }
-for (let i = 0; i < 3; i++) $("gallery").append(el("li", "frame", T.gallery.placeholder));
+
+// ---------- her drawings ----------
+const viewer = $("viewer");
+function frameFor(art) { // a framed picture that opens bigger when touched
+  const button = el("button", "frame");
+  button.type = "button";
+  button.setAttribute("aria-label", T.gallery.open + ": " + art.alt);
+  const img = el("img");
+  img.src = "img/" + art.file;
+  img.alt = "";
+  img.width = art.w; img.height = art.h;
+  img.loading = "lazy"; img.decoding = "async";
+  button.append(img);
+  button.addEventListener("click", () => {
+    $("viewerImage").src = img.src;
+    $("viewerImage").alt = art.alt;
+    viewer.showModal();
+  });
+  return button;
+}
+T.gallery.list.forEach((art) => {
+  const li = el("li");
+  li.append(frameFor(art));
+  $("gallery").append(li);
+});
+$("portrait").append(frameFor(T.portrait.art));
+viewer.addEventListener("click", (e) => { if (e.target === viewer) viewer.close(); });
+$("viewerClose").addEventListener("click", () => viewer.close());
+
+// ---------- the letter and the signature ----------
 T.letter.body.forEach((p) => $("letter").append(el("p", null, p)));
+
+// The signature has no name: two knots of ink tied by one line, drawn in one stroke like her scribble art.
+function drawSignature(target) {
+  const rnd = seeded(2002);
+  const pts = [];
+  const knot = (cx, cy, turns) => {
+    const steps = turns * 26, start = rnd() * 6.28;
+    for (let i = 0; i < steps; i++) {
+      const a = start + (i / 26) * 6.2832;
+      const r = 2 + rnd() * 17;
+      pts.push([cx + Math.cos(a) * r * 1.15, cy + Math.sin(a) * r]);
+    }
+  };
+  knot(62, 62, 9);
+  for (let i = 0; i <= 110; i++) { // the long looping line between the two
+    const t = i / 110, a = t * 6.2832 * 4.5;
+    pts.push([62 + t * 176 + Math.cos(a) * 26 * Math.sin(t * Math.PI), 62 - Math.sin(t * Math.PI) * 14 + Math.sin(a) * 34 * Math.sin(t * Math.PI)]);
+  }
+  knot(238, 62, 9);
+  let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+  for (let i = 1; i < pts.length - 1; i++) { // smooth curve through the middle of each pair of points
+    const mx = (pts[i][0] + pts[i + 1][0]) / 2, my = (pts[i][1] + pts[i + 1][1]) / 2;
+    d += ` Q${pts[i][0].toFixed(1)},${pts[i][1].toFixed(1)} ${mx.toFixed(1)},${my.toFixed(1)}`;
+  }
+  const path = svg("path", { d, class: "signature__line", pathLength: 1 });
+  target.append(path);
+  return path;
+}
+const signatureLine = drawSignature($("signature"));
 
 // ---------- scroll scenes ----------
 // Each tracked thing gets a number from 0 to 1 that follows the scroll.
@@ -274,6 +338,7 @@ document.querySelectorAll(".reveal .lead").forEach((lead) => { // split into wor
   lead.style.setProperty("--n", words.length);
   track(lead, "read", setVar(lead, "--lp"));
 });
+track($("signature"), "sign", (p) => { signatureLine.style.strokeDashoffset = 1 - p; });
 document.querySelectorAll(".song").forEach((song) => track(song, "in", setVar(song, "--p")));
 flowers.forEach((flower) => {
   const stem = flower.querySelector(".flower__stem");
@@ -286,6 +351,7 @@ function measure(t, vh) {
   if (t.mode === "pin") return clamp(-r.top / Math.max(1, r.height - vh));
   if (t.mode === "in") return clamp((vh * 0.98 - r.top) / (vh * 0.34));
   if (t.mode === "read") return clamp((vh * 0.92 - r.top) / (vh * 0.42));
+  if (t.mode === "sign") return clamp((vh * 0.95 - r.top) / (vh * 0.3));
   return clamp(1 - r.bottom / (vh * 0.28)); // "out"
 }
 function update() {
