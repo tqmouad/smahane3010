@@ -16,7 +16,9 @@ Working title: "Smahane, in bloom since 30/10/2002".
 | Language | Easy English |
 | Birth details | 30/10/2002, 5 pm, Beni Mellal (Krazza), Morocco |
 | Devices | Phones first, must also work well on iPad |
-| Address | Free Cloudflare Pages address (`.pages.dev`). Name not final. Proposed: `smahane-bloomed-30-10-2002` |
+| Address | Free Cloudflare Pages address: `smahane-bloomed-30-10-2002.pages.dev` (chosen by owner; not created yet, so not known if the name is free) |
+| Look | "From another world": stars, moon, clear sky, animations, a sky switch |
+| Songs | Owner said yes to both: world hits from her birth week and Arabic / Moroccan songs. Links out only, no hosted music. |
 | Hosting | Static site on Cloudflare Pages. Owner has GitHub and Cloudflare accounts. |
 | Content from owner | Photos, her drawings, her voice audios, a letter (to be sent at build step) |
 
@@ -47,16 +49,41 @@ Not received yet: `new-website-playbook.md` and `security-checklist.md` (owner m
 8. Cartoon corner (Spacetoon spirit, our own art, no copied songs)
 9. Letter and countdown to next birthday
 
+## How the site is built
+
+- Plain files in `site/`: no packages, no build step. Cloudflare Pages setting: build command empty, output folder `site`.
+- `site/js/text.en.js`: every word on the site.
+- `site/css/tokens.css`: every colour and size, for both skies.
+- `site/css/site.css`: layout and motion. `site/js/main.js`: page logic. `site/js/sky.js`: star field.
+- `site/js/theme.js`: picks golden hour or night before the page draws. `site/js/fullmoons.js`: full-moon dates.
+- `site/_headers`: strict security headers (no inline scripts or styles), plus noindex. `site/robots.txt`: blocks all crawlers.
+- Light mode = golden hour at 5:00 pm (no stars, no moon: true to that minute). Dark mode = her first night (stars, her crescent moon).
+
 ## Status
 
 | Step | Status |
 |---|---|
-| 1. Research: birth sky numbers, licences | Done on branch `research/step-1-sky-and-licences` (see `docs/`) |
-| 2. Design mockup of first three sections | Not started. Waiting for owner "go". |
-| 3. Build | Not started |
+| 1. Research: birth sky numbers, licences | Done (`docs/BIRTH_SKY.md`, `docs/LICENSES.md`) |
+| 2. First full version | Built on branch `build/v1-sky-and-garden`. Sections working: hero, the minute, moon, days counter, Scorpio, songs (9), garden (24 flowers), letter. Placeholders: voice, gallery, letter words, flower memories. |
+| 3. Owner's content | Waiting for: photos, drawings, audios, letter, 24 memories, song picks |
+| 4. Deploy to Cloudflare Pages | Not done. Owner must connect the repo in Cloudflare. |
+
+## Checked so far (on 2026-11-11, in Chrome only)
+
+- Loads with the real security headers and no console errors at phone (390), iPad (820) and desktop (1440) sizes, both skies.
+- No sideways scrolling; all visible buttons and links at least 44px.
+- Counters show 8,778 days, 297 full moons, 24 trips, matching `docs/BIRTH_SKY.md`.
+- Sky switch and flower pop-up work by click.
+
+## Not checked yet
+
+- Real iPhone, real iPad, Safari, Firefox.
+- Screen reader, keyboard-only walk-through, colour contrast measurement.
+- Reduced-motion mode.
+- The Cloudflare deployment itself.
 
 ## Open questions for the owner
 
-1. Final address name.
-2. Songs: world hits from her birth week, or Arabic / Moroccan songs from 2002?
+1. Which Arabic / Moroccan / cartoon songs to add (owner to name them).
+2. The 24 memories, the letter, photos, drawings, audios.
 3. Please send `new-website-playbook.md` and `security-checklist.md` if they exist.

@@ -9,13 +9,22 @@ Note: this site is a private gift with no ads. Commercial use is still recorded,
 
 | Item | Type | Licence | Commercial use | Where read | Date read | Status |
 |---|---|---|---|---|---|---|
-| Caveat | Font (handwriting) | SIL Open Font License 1.1 | Allowed. May be bundled and embedded. The font may not be sold by itself. | `OFL.txt` in github.com/googlefonts/caveat | 2026-11-11 | Candidate, not chosen yet |
-| Nunito | Font (round, friendly) | SIL Open Font License 1.1 | Same as above | `OFL.txt` in github.com/googlefonts/nunito | 2026-11-11 | Candidate, not chosen yet |
-| Fraunces | Font (soft serif) | SIL Open Font License 1.1 | Same as above | `OFL.txt` in github.com/undercasetype/Fraunces | 2026-11-11 | Candidate, not chosen yet |
+| Caveat | Font (handwriting) | SIL Open Font License 1.1 | Allowed. May be bundled and embedded. The font may not be sold by itself. | `OFL.txt` in github.com/googlefonts/caveat | 2026-11-11 | In use. Stored in `site/fonts/` with its licence file |
+| Nunito | Font (round, friendly) | SIL Open Font License 1.1 | Same as above | `OFL.txt` in github.com/googlefonts/nunito | 2026-11-11 | Not used |
+| Fraunces | Font (soft serif) | SIL Open Font License 1.1 | Same as above | `OFL.txt` in github.com/undercasetype/Fraunces | 2026-11-11 | In use (normal and italic). Stored in `site/fonts/` with its licence file |
 
 OFL conditions to follow if a font is used: keep the copyright and licence file with the font files; do not sell the font alone; do not use the font authors' names to promote the site.
 
-Fonts will be stored inside the site (self-hosted), so no outside font service is called.
+Fonts are stored inside the site (self-hosted), so no outside font service is called. The font files were made smaller (Latin letters only, woff2 format). The OFL allows modified versions; neither font declares a Reserved Font Name in its licence file.
+
+## In use, with limits (added 2026-11-11)
+
+| Item | Used for | What it is | What was and was not checked |
+|---|---|---|---|
+| Nine song titles and artists | Songs section | Plain facts: songs listed as being in the US top ten in the week of 2 Nov 2002, taken from Wikipedia's "List of Billboard Hot 100 top-ten singles in 2002" as shown in a web search result | The page itself and Wikipedia's licence text were not opened. Only titles and artist names are used, no chart positions except the number one ("Dilemma"), which a second Wikipedia list also shows. No Billboard page was copied. |
+| YouTube search links | "Find it" buttons | A normal link that opens YouTube's search in a new tab. Nothing is embedded, hosted or loaded from YouTube. | YouTube terms not read. A plain link needs no API. |
+| Scorpius star positions | Constellation drawing | 15 star positions typed by hand from memory | Only Antares and Shaula were compared with PyEphem's star list (they match). The other 13 are approximate. The drawing is for beauty, not for navigation. |
+| Full-moon dates 2002 to 2044 | "Full moons" counter | Calculated with PyEphem, saved in `site/js/fullmoons.js` | The count for 11 Nov 2026 (297) matches the step 1 calculation. |
 
 ## Used for research only (not part of the site)
 

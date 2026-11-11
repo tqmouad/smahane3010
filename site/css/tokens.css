@@ -1,0 +1,121 @@
+/* All colours and sizes live here. Change the look in this one file. */
+
+@font-face {
+  font-family: "Fraunces";
+  src: url("../fonts/fraunces.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fraunces";
+  src: url("../fonts/fraunces-i.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Caveat";
+  src: url("../fonts/caveat.woff2") format("woff2");
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+:root {
+  /* type */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+  --size-hero: clamp(3.6rem, 17vw, 11rem);
+  --size-h2: clamp(2rem, 6.5vw, 3.6rem);
+  --size-big-number: clamp(3rem, 15vw, 8rem);
+  --size-lead: clamp(1.15rem, 2.6vw, 1.45rem);
+  --size-body: 1.0625rem;
+  --size-small: 0.9rem;
+  --size-hand: clamp(1.5rem, 4vw, 2rem);
+
+  /* space and shape */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --space-section: clamp(5rem, 16vh, 10rem);
+  --page-width: 68rem;
+  --text-width: 38rem;
+  --radius: 1.25rem;
+  --radius-pill: 999px;
+  --tap: 2.75rem; /* 44px minimum touch size */
+
+  /* motion */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --slow: 1.4s;
+  --medium: 0.7s;
+
+  /* the two skies (both are always drawn; one fades over the other) */
+  --golden-1: #9fc0e8;
+  --golden-2: #f3cdb4;
+  --golden-3: #f9ad7a;
+  --golden-4: #ffdca6;
+  --night-1: #03040f;
+  --night-2: #0a1030;
+  --night-3: #17235a;
+  --night-4: #2b2f77;
+  --sun-core: #fff6d8;
+  --sun-halo: rgba(255, 196, 120, 0.85);
+  --star: #ffffff;
+  --star-warm: #ffe2b0;
+  --star-cool: #bcd4ff;
+  --antares: #ff8f70;
+
+  /* flower colours (same in both skies) */
+  --petal-1: #f29bb2;
+  --petal-2: #f6c97a;
+  --petal-3: #c9a7f5;
+  --petal-4: #ff8f70;
+  --petal-5: #9fd8ff;
+  --petal-6: #fff1c9;
+  --flower-heart: #ffd76a;
+}
+
+/* Night sky: after midnight, when her moon rose */
+:root,
+:root[data-theme="night"] {
+  color-scheme: dark;
+  --page-bg: #03040f;
+  --ink: #f6f1e7;
+  --ink-soft: #c3c9e6;
+  --accent: #f6c97a;
+  --accent-2: #f29bb2;
+  --line: rgba(255, 255, 255, 0.16);
+  --card: rgba(255, 255, 255, 0.06);
+  --card-strong: rgba(12, 16, 48, 0.92);
+  --glow: rgba(246, 201, 122, 0.45);
+  --stem: #7fcf9b;
+  --moon-lit: #fdf6dc;
+  --moon-dark: rgba(255, 255, 255, 0.07);
+  --focus: #ffe9a8;
+  --stars-opacity: 1;
+  --sun-opacity: 0;
+  --moon-opacity: 1;
+}
+
+/* Golden hour: 5:00 pm, the minute she was born */
+:root[data-theme="golden"] {
+  color-scheme: light;
+  --page-bg: #f3cdb4;
+  --ink: #1d1642;
+  --ink-soft: #453a66;
+  --accent: #8a3410;
+  --accent-2: #8c2752;
+  --line: rgba(29, 22, 66, 0.22);
+  --card: rgba(255, 255, 255, 0.5);
+  --card-strong: rgba(255, 246, 232, 0.97);
+  --glow: rgba(255, 190, 110, 0.7);
+  --stem: #2f7a4d;
+  --moon-lit: #fffaf0;
+  --moon-dark: rgba(29, 22, 66, 0.1);
+  --focus: #1d1642;
+  --stars-opacity: 0;
+  --sun-opacity: 1;
+  --moon-opacity: 0;
+}

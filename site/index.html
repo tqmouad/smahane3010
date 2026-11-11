@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>Smahane, in bloom since 30/10/2002</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="js/theme.js"></script>
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <a class="skip" href="#story" data-t="nav.skip"></a>
+
+  <!-- The sky sits behind everything -->
+  <div class="sky" aria-hidden="true">
+    <div class="sky__layer sky__layer--golden"></div>
+    <div class="sky__layer sky__layer--night"></div>
+    <div class="sky__sun"></div>
+    <canvas class="sky__stars" id="stars"></canvas>
+  </div>
+
+  <header class="top">
+    <button class="switch" id="themeSwitch" type="button" role="switch" aria-checked="true">
+      <span class="switch__label switch__label--golden" data-t="nav.golden"></span>
+      <span class="switch__track" aria-hidden="true">
+        <span class="switch__knob"></span>
+      </span>
+      <span class="switch__label switch__label--night" data-t="nav.night"></span>
+    </button>
+  </header>
+
+  <main id="story">
+    <section class="hero" aria-labelledby="heroName">
+      <svg class="hero__moon" viewBox="0 0 200 200" aria-hidden="true">
+        <use href="#moonShape"></use>
+      </svg>
+      <p class="hero__kicker hand" data-t="hero.kicker"></p>
+      <h1 class="hero__name" id="heroName" data-t="hero.name"></h1>
+      <p class="hero__line" data-t="hero.line"></p>
+      <p class="hero__scroll" data-t="hero.scroll"></p>
+    </section>
+
+    <section class="block reveal" aria-labelledby="momentTitle">
+      <h2 id="momentTitle" data-t="moment.title"></h2>
+      <p class="lead" data-t="moment.lead"></p>
+      <ul class="facts" data-facts="moment.facts"></ul>
+      <p class="hand hint" data-t="moment.hint"></p>
+    </section>
+
+    <section class="block block--split reveal" aria-labelledby="moonTitle">
+      <div class="moonwrap">
+        <svg class="bigmoon" viewBox="0 0 200 200" role="img" aria-labelledby="moonAlt">
+          <title id="moonAlt" data-t="moon.alt"></title>
+          <defs>
+            <g id="moonShape">
+              <circle class="moon__dark" cx="100" cy="100" r="80"></circle>
+              <path class="moon__lit" id="moonLit" d=""></path>
+            </g>
+          </defs>
+          <use href="#moonShape"></use>
+        </svg>
+      </div>
+      <div>
+        <h2 id="moonTitle" data-t="moon.title"></h2>
+        <p class="lead" data-t="moon.lead"></p>
+        <ul class="facts facts--stack" data-facts="moon.facts"></ul>
+      </div>
+    </section>
+
+    <section class="block block--wide block--center reveal" aria-labelledby="daysTitle">
+      <h2 id="daysTitle" data-t="days.title"></h2>
+      <p class="lead" data-t="days.lead"></p>
+      <p class="bignumber"><span id="daysAlive">0</span> <span class="bignumber__unit" data-t="days.unit"></span></p>
+      <p class="hand" data-t="days.and"></p>
+      <ul class="facts facts--four">
+        <li class="fact"><span class="fact__big" id="hoursAlive">0</span><span class="fact__small" data-t="days.stats.hours"></span></li>
+        <li class="fact"><span class="fact__big" id="moonsAlive">0</span><span class="fact__small" data-t="days.stats.moons"></span></li>
+        <li class="fact"><span class="fact__big" id="tripsAlive">0</span><span class="fact__small" data-t="days.stats.trips"></span></li>
+        <li class="fact"><span class="fact__big" id="daysToNext">0</span><span class="fact__small" data-t="days.stats.next"></span></li>
+      </ul>
+    </section>
+
+    <section class="block block--center reveal" aria-labelledby="scorpioTitle">
+      <h2 id="scorpioTitle" data-t="scorpio.title"></h2>
+      <p class="lead" data-t="scorpio.lead"></p>
+      <svg class="scorpio" id="scorpio" viewBox="0 0 600 520" role="img" aria-labelledby="scorpioAlt">
+        <title id="scorpioAlt" data-t="scorpio.alt"></title>
+      </svg>
+      <p class="hand" data-t="scorpio.note"></p>
+    </section>
+
+    <section class="block reveal" aria-labelledby="songsTitle">
+      <h2 id="songsTitle" data-t="songs.title"></h2>
+      <p class="lead" data-t="songs.lead"></p>
+      <ul class="songs" id="songs"></ul>
+      <p class="hand hint" data-t="songs.more"></p>
+    </section>
+
+    <section class="block block--wide reveal" aria-labelledby="gardenTitle">
+      <h2 id="gardenTitle" data-t="garden.title"></h2>
+      <p class="lead" data-t="garden.lead"></p>
+      <ul class="garden" id="garden"></ul>
+    </section>
+
+    <section class="block reveal" aria-labelledby="voiceTitle">
+      <h2 id="voiceTitle" data-t="voice.title"></h2>
+      <p class="lead" data-t="voice.lead"></p>
+      <div class="voice" aria-hidden="true" id="voiceBars"></div>
+      <p class="placeholder" data-t="voice.placeholder"></p>
+    </section>
+
+    <section class="block reveal" aria-labelledby="galleryTitle">
+      <h2 id="galleryTitle" data-t="gallery.title"></h2>
+      <p class="lead" data-t="gallery.lead"></p>
+      <ul class="gallery" id="gallery"></ul>
+    </section>
+
+    <section class="block block--letter reveal" aria-labelledby="letterTitle">
+      <h2 id="letterTitle" data-t="letter.title"></h2>
+      <div class="letter" id="letter"></div>
+      <p class="letter__sign hand" data-t="letter.sign"></p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p class="hand" data-t="footer.line"></p>
+    <p class="foot__small" data-t="footer.facts"></p>
+  </footer>
+
+  <dialog class="memory" id="memory" aria-labelledby="memoryTitle">
+    <div class="memory__flower" id="memoryFlower" aria-hidden="true"></div>
+    <h3 id="memoryTitle"></h3>
+    <p class="hand" id="memoryYear"></p>
+    <p id="memoryText"></p>
+    <p class="memory__close"><button class="btn" id="memoryClose" type="button" data-t="garden.close"></button></p>
+  </dialog>
+
+  <noscript><p class="noscript">This page needs JavaScript to show its sky.</p></noscript>
+</body>
+</html>
