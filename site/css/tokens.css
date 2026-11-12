@@ -52,6 +52,7 @@
   --pin-days: 210vh;
   --pin-scorpio: 280vh;
   --pin-wall: 380vh;
+  --pin-chess: 440vh;
 
   /* motion */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -114,6 +115,14 @@
   --moon-back: #1a2050;
   --moon-rgb: 253, 246, 220;
   --focus: #ffe9a8;
+  /* chessboard and chart */
+  --board-light: #c9d1f3;
+  --board-dark: #2f3680;
+  --board-edge: #0f1346;
+  --board-glow: rgba(246, 201, 122, ALPHA);
+  --piece-her: #f0b94d;
+  --piece-his: #f8f3e6;
+  --piece-ink: #0d1038;
   --stars-opacity: 1;
   --sun-opacity: 0;
   --moon-opacity: 1;
@@ -137,6 +146,14 @@
   --moon-back: #d9c3c2;
   --moon-rgb: 255, 250, 240;
   --focus: #1d1642;
+  /* chessboard and chart */
+  --board-light: #fff1d6;
+  --board-dark: #b0603a;
+  --board-edge: #5a2a1a;
+  --board-glow: rgba(255, 190, 110, ALPHA);
+  --piece-her: #e9a93a;
+  --piece-his: #fffaf0;
+  --piece-ink: #1d1642;
   --stars-opacity: 0;
   --sun-opacity: 1;
   --moon-opacity: 0;

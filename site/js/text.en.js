@@ -138,6 +138,89 @@ export default {
     ],
   },
 
+  // Her birth chart. The numbers are in js/skydata.js. Astrology is for fun; the places of the planets are real.
+  chart: {
+    title: "Your sky in a circle",
+    lead: "This is the sky at the minute you were born, seen from Beni Mellal at 5:00 pm. The outer ring has the twelve zodiac signs. Each round badge is the Sun, the Moon or a planet. Astrology is just for fun, but the places of the planets are real.",
+    alt: "A round chart of the sky on 30 October 2002 at 5:00 pm, with the Sun, the Moon and eight planets placed inside the twelve zodiac signs.",
+    centre: ["30 · 10 · 2002", "5:00 pm", "Beni Mellal"],
+    risingShort: "Asc",
+    topShort: "MC",
+    signShort: ["Ari", "Tau", "Gem", "Can", "Leo", "Vir", "Lib", "Sco", "Sag", "Cap", "Aqu", "Pis"],
+    signs: ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"],
+    planets: {
+      Sun: { short: "Su", name: "Sun" },
+      Moon: { short: "Mo", name: "Moon" },
+      Mercury: { short: "Me", name: "Mercury" },
+      Venus: { short: "Ve", name: "Venus" },
+      Mars: { short: "Ma", name: "Mars" },
+      Jupiter: { short: "Ju", name: "Jupiter" },
+      Saturn: { short: "Sa", name: "Saturn" },
+      Uranus: { short: "Ur", name: "Uranus" },
+      Neptune: { short: "Ne", name: "Neptune" },
+      Pluto: { short: "Pl", name: "Pluto" },
+    },
+    tableTitle: "Where everything stood",
+    columns: { planet: "Planet", sign: "Sign", house: "House" },
+    rising: "Rising sign (Asc)",
+    top: "Top of the sky (MC)",
+    backwards: "moving backwards",
+    degrees: "{n}°",
+    elementsTitle: "Elements",
+    elements: [
+      { name: "Fire", note: "courage and energy" },
+      { name: "Earth", note: "calm and practical" },
+      { name: "Air", note: "ideas, words and friends" },
+      { name: "Water", note: "feelings and dreams" },
+    ],
+    modesTitle: "Ways of moving",
+    modes: [
+      { name: "Cardinal", note: "starts things" },
+      { name: "Fixed", note: "stays and finishes" },
+      { name: "Mutable", note: "bends and changes" },
+    ],
+    countOf: "{n} of {total}",
+    most: "Most of your sky is {name}: {note}.",
+    sun: "Your Sun is in {sign}, a {element} sign.",
+    small: "How this was made: the places were calculated with a sky calculator for Beni Mellal, 30 October 2002, 5:00 pm. The rising sign and the houses depend on the exact minute, so they are only as exact as “5:00 pm”. Houses use the simple whole-sign way. Counts include the Sun, the Moon, eight planets and the rising sign.",
+  },
+
+  // Famous people whose sky was close to hers. Scores come from tools (see docs/BIRTH_SKY.md). Birth dates are checked (docs/LICENSES.md).
+  twins: {
+    title: "Other stars in your sky",
+    lead: "These famous people were born on other days. But on their birthdays, the planets stood in places close to where they stood on yours. We looked at eight people. Here is how close each sky was to yours.",
+    closest: "Closest: your {planet} and theirs, only {n}° apart",
+    born: "Born {date}",
+    how: "How we count: we measured how far apart the two skies were for the Sun and seven planets, up to Neptune. 100% would be exactly the same sky. We left out the Moon and the exact hour, because we don't know their birth times. Only eight people were checked, so this is not a list of the whole world. Just for fun.",
+    list: [
+      { name: "Achraf Hakimi", job: "footballer", born: "4 November 1998", score: 79, planet: "Sun", apart: 5 }, // closest Sun 4.76
+      { name: "Billie Eilish", job: "singer", born: "18 December 2001", score: 75, planet: "Neptune", apart: 1 }, // closest Neptune 1.22
+      { name: "Pablo Picasso", job: "painter", born: "25 October 1881", score: 63, planet: "Sun", apart: 5 }, // closest Sun 4.87
+      { name: "Hayao Miyazaki", job: "film artist", born: "5 January 1941", score: 58, planet: "Venus", apart: 41 },
+      { name: "Marie Curie", job: "scientist", born: "7 November 1867", score: 56, planet: "Sun", apart: 8 }, // closest Sun 7.54
+      { name: "Frida Kahlo", job: "painter", born: "6 July 1907", score: 49, planet: "Jupiter", apart: 26 },
+      { name: "Vincent van Gogh", job: "painter", born: "30 March 1853", score: 37, planet: "Neptune", apart: 34 },
+      { name: "Akira Toriyama", job: "manga artist", born: "5 April 1955", score: 32, planet: "Jupiter", apart: 26 },
+    ],
+  },
+
+  // A 3D chessboard: her queen and his king, one move for each moment of the story.
+  chess: {
+    title: "Our game of chess",
+    lead: "You don't need to know chess. Just watch the queen and the king find each other.",
+    alt: "A 3D chessboard. A queen with Smahane's face and a king with the maker's face walk towards each other, one move for each moment of the story.",
+    drag: "Slide your finger on the board to turn it.",
+    moveLabel: "Move {n} · {move}",
+    start: { label: "Start", year: "Before", title: "Far apart", text: "A queen on one side of the board. A king on the other. Scroll slowly and watch them move." },
+    moves: [
+      { year: "2022", title: "We meet", text: "Our last year at university. The queen steps into the middle of the board, and I remember your wonderful eyes." },
+      { year: "2023", title: "We get engaged", text: "The king takes one small step towards you. One small step for a king, one big step for us." },
+      { year: "2023", title: "The mountains", text: "Higher and higher. We went up to the mountains together, and we had the best time." },
+      { year: "2024", title: "Casablanca", text: "A hard year for you, but you made new friends, and it was the best time for us." },
+      { year: "Now", title: "Checkmate", text: "The queen and the king, side by side. In this game, nobody loses. We both win.", note: "In chess, the # sign means checkmate." },
+    ],
+  },
+
   voice: {
     title: "Your voice, in bloom",
     lead: "Your own voice, turned into flowers and soft notes.",

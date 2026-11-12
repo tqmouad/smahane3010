@@ -8,12 +8,12 @@
   <title>Smahane, in bloom since 30/10/2002</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/tokens.css?v=10">
-  <link rel="stylesheet" href="css/site.css?v=10">
-  <script src="js/theme.js?v=10"></script>
-  <script src="vendor/gsap.min.js?v=10" defer></script>
-  <script src="vendor/ScrollTrigger.min.js?v=10" defer></script>
-  <script type="module" src="js/main.js?v=10"></script>
+  <link rel="stylesheet" href="css/tokens.css?v=11">
+  <link rel="stylesheet" href="css/site.css?v=11">
+  <script src="js/theme.js?v=11"></script>
+  <script src="vendor/gsap.min.js?v=11" defer></script>
+  <script src="vendor/ScrollTrigger.min.js?v=11" defer></script>
+  <script type="module" src="js/main.js?v=11"></script>
 </head>
 <body>
   <a class="skip" href="#story" data-t="nav.skip"></a>
@@ -119,6 +119,42 @@
       </div>
     </section>
 
+    <section class="block block--wide reveal" aria-labelledby="chartTitle">
+      <h2 id="chartTitle" data-t="chart.title"></h2>
+      <p class="lead" data-t="chart.lead"></p>
+      <div class="chart">
+        <svg class="chart__wheel" id="chartWheel" viewBox="0 0 440 440" role="img" aria-labelledby="chartAlt">
+          <title id="chartAlt" data-t="chart.alt"></title>
+        </svg>
+        <div class="chart__side">
+          <h3 data-t="chart.elementsTitle"></h3>
+          <ul class="facts chart__counts chart__counts--four" id="chartElements"></ul>
+          <p class="chart__most" id="chartMost"></p>
+          <h3 data-t="chart.modesTitle"></h3>
+          <ul class="facts chart__counts" id="chartModes"></ul>
+        </div>
+      </div>
+      <table class="chart__table" id="chartTable">
+        <caption data-t="chart.tableTitle"></caption>
+        <thead>
+          <tr>
+            <th scope="col" data-t="chart.columns.planet"></th>
+            <th scope="col" data-t="chart.columns.sign"></th>
+            <th scope="col" data-t="chart.columns.house"></th>
+          </tr>
+        </thead>
+        <tbody id="chartRows"></tbody>
+      </table>
+      <p class="chart__small" data-t="chart.small"></p>
+    </section>
+
+    <section class="block reveal" aria-labelledby="twinsTitle">
+      <h2 id="twinsTitle" data-t="twins.title"></h2>
+      <p class="lead" data-t="twins.lead"></p>
+      <ol class="twins" id="twins"></ol>
+      <p class="chart__small" data-t="twins.how"></p>
+    </section>
+
     <section class="block reveal" aria-labelledby="songsTitle">
       <h2 id="songsTitle" data-t="songs.title"></h2>
       <p class="lead" data-t="songs.lead"></p>
@@ -135,6 +171,17 @@
       <h2 id="voiceTitle" data-t="voice.title"></h2>
       <p class="lead" data-t="voice.lead"></p>
       <div class="voice" aria-hidden="true" id="voiceBars"></div>
+    </section>
+
+    <section class="pin pin--chess" aria-labelledby="chessTitle">
+      <div class="pin__stick chess" id="chessScene">
+        <h2 id="chessTitle" data-t="chess.title"></h2>
+        <p class="lead chess__lead" data-t="chess.lead"></p>
+        <canvas class="chess__board" id="chessBoard" role="img" aria-labelledby="chessAlt"></canvas>
+        <span id="chessAlt" hidden data-t="chess.alt"></span>
+        <ol class="chess__moves" id="chessMoves"></ol>
+        <p class="chess__drag" data-t="chess.drag"></p>
+      </div>
     </section>
 
     <section class="pin pin--wall" aria-labelledby="galleryTitle">

@@ -59,3 +59,21 @@ Fonts are stored inside the site (self-hosted), so no outside font service is ca
 | greensock/gsap-skills | Reading only, as a guide to correct GSAP use | MIT (licence file in the repo) | The repo's `LICENSE` file | 2026-11-12 | Nothing from it is in the site. |
 | Motion (motiondivision/motion) | Not used | MIT | `LICENSE.md` in the repo | 2026-11-12 | Read because the owner suggested it. Left out because GSAP does the same job. |
 | Moon surface map (`site/img/moon-map.jpg`) | The 3D moon globe | Made by our own code, so no outside licence | n/a | 2026-11-12 | It is a drawing by code, not a photograph. Dark "seas" and bright craters are placed roughly where the real ones are, from memory. NASA's real map would be better but nasa.gov could not be reached from this session. |
+
+## Birth dates for the "Other stars in your sky" list (checked 12 Nov 2026)
+
+Plain facts (dates are not copyrightable); each was read from a public page via web search:
+- Pablo Picasso, 25 Oct 1881; Vincent van Gogh, 30 Mar 1853; Marie Curie, 7 Nov 1867; Billie Eilish, 18 Dec 2001 — britannica.com
+- Frida Kahlo, 6 Jul 1907 — biography.com, jwa.org and museofridakahlo.org.mx agree
+- Hayao Miyazaki, 5 Jan 1941 — animenewsnetwork.com and encyclopedia.com agree
+- Akira Toriyama, 5 Apr 1955 — animenewsnetwork.com and themoviedb.org agree
+- Achraf Hakimi, 4 Nov 1998 — psg.fr (his club's official page)
+
+## Pictures added 12 Nov 2026
+
+- `site/img/cameo-his.jpg`: a crop of the maker's own portrait, sent by him in chat. His picture, his permission.
+- `site/img/cameo-her.jpg`: a crop of `site/img/portrait.jpg`, already recorded above.
+
+## The chessboard, chart wheel and scores
+
+- Drawn and computed by our own code (`site/js/chess.js`, `site/js/chart.js`, `site/js/skydata.js`). No new packages, fonts or outside pictures.

@@ -2,7 +2,7 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--page-bg); }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--page-bg); overflow-x: clip; }
 
 body {
   margin: 0;
@@ -558,3 +558,97 @@ canvas.bigmoon { touch-action: pan-y; cursor: grab; }
 :root[data-motion="calm"] .ring-stage { height: auto; perspective: none; }
 :root[data-motion="calm"] .ring { width: 100%; height: auto; transform: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
 :root[data-motion="calm"] .ring__item { position: static; transform: none; }
+
+
+/* ---------- v11: her chart, the same-sky stars, and the chessboard ---------- */
+
+.pin--chess { --pin-length: var(--pin-chess); }
+.reveal > .twins { opacity: 1; transform: none; }
+
+/* the chart */
+.chart { display: grid; gap: var(--space-4); margin-top: var(--space-4); align-items: center; }
+@media (min-width: 52rem) { .chart { grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr); gap: var(--space-5); } }
+.chart__wheel { display: block; width: min(100%, 32rem); height: auto; margin-inline: auto; overflow: visible; }
+.chart__ring { fill: none; stroke: var(--ink); stroke-width: 1.2; opacity: 0.55; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.chart__ring--0 { stroke: var(--accent); stroke-width: 1.8; opacity: 0.9; }
+.chart__divider { stroke: var(--ink); stroke-width: 0.8; opacity: 0.4; }
+.chart__sign { font-family: var(--font-display); font-size: 14px; fill: var(--ink-soft); }
+.chart__house { font-family: var(--font-hand); font-size: 17px; fill: var(--ink-soft); opacity: 0.8; }
+.chart__axis { stroke: var(--accent); stroke-width: 1.6; opacity: 0.95; }
+.chart__axis--soft { stroke-width: 0.9; opacity: 0.45; stroke-dasharray: 3 4; }
+.chart__axislabel { font-family: var(--font-hand); font-size: 20px; fill: var(--accent); }
+.chart__tick { stroke: var(--ink); stroke-width: 1.4; }
+.chart__badge { fill: var(--card-strong); stroke: var(--ink); stroke-width: 1.3; }
+.chart__code { font-family: var(--font-display); font-size: 11px; font-weight: 600; fill: var(--ink); }
+.chart__planet--sun .chart__badge { fill: var(--accent); stroke: var(--accent); }
+.chart__planet--sun .chart__code { fill: var(--page-bg); }
+.chart__planet--moon .chart__badge { fill: var(--moon-lit); }
+.chart__planet--moon .chart__code { fill: #1d1642; }
+.chart__planet { opacity: clamp(0, calc(var(--p, 1) * 9 - 3.2 - var(--i) * 0.45), 1); transform-box: fill-box; transform-origin: center; }
+.chart__date { font-family: var(--font-hand); font-size: 24px; fill: var(--accent); }
+.chart__where { font-family: var(--font-display); font-size: 13px; fill: var(--ink-soft); }
+.chart__middle { opacity: clamp(0, calc(var(--p, 1) * 6 - 2), 1); }
+.chart__signs, .chart__axes { opacity: clamp(0, calc(var(--p, 1) * 5 - 0.8), 1); }
+.chart h3 { margin: var(--space-3) 0 0; font-size: 1.15rem; font-weight: 500; letter-spacing: 0.04em; color: var(--accent); }
+.chart h3:first-child { margin-top: 0; }
+.chart__counts { margin-top: var(--space-2); }
+.chart__counts .fact { padding: var(--space-2); }
+.chart__counts--four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.chart__counts .fact__big { font-size: 1.6rem; }
+.fact--top { border-color: var(--accent); box-shadow: 0 0 1.4rem var(--glow); }
+.fact__bar { display: block; height: 0.3rem; margin-top: 0.5rem; border-radius: var(--radius-pill); background: var(--line); overflow: hidden; }
+.fact__bar::after { content: ""; display: block; width: calc(var(--share, 0) * 100%); height: 100%; background: var(--accent); }
+.chart__most { margin-top: var(--space-2); color: var(--ink-soft); font-style: italic; }
+.chart__table { width: 100%; margin-top: var(--space-4); border-collapse: collapse; font-size: var(--size-small); }
+.chart__table caption { padding-bottom: var(--space-1); text-align: left; font-family: var(--font-hand); font-size: var(--size-hand); color: var(--accent); }
+.chart__table th, .chart__table td { padding: 0.5rem 0.4rem; text-align: left; border-bottom: 1px solid var(--line); }
+.chart__table th { font-weight: 600; color: var(--ink-soft); }
+.chart__table td:last-child, .chart__table th:last-child { text-align: right; }
+.chart__table em { color: var(--ink-soft); }
+.chart__small { margin-top: var(--space-3); font-size: var(--size-small); font-style: italic; color: var(--ink-soft); }
+
+/* the same-sky stars */
+.twins { display: grid; gap: var(--space-1); margin-top: var(--space-4); counter-reset: twin; }
+.twin {
+  --dir: 1; counter-increment: twin;
+  display: grid; grid-template-columns: 2rem 1fr auto; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-2);
+  border: 1px solid var(--line); border-radius: var(--radius); background: var(--card);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  opacity: var(--p, 1);
+  transform-origin: calc(50% - var(--dir) * 50%) 50%;
+  transform: perspective(900px) translateX(calc((1 - var(--p, 1)) * var(--dir) * 12%)) rotateY(calc((1 - var(--p, 1)) * var(--dir) * -70deg));
+}
+.twin:nth-child(odd) { --dir: -1; }
+.twin::before { content: counter(twin); font-family: var(--font-hand); font-size: 1.7rem; color: var(--accent); text-align: center; }
+.twin__name { display: block; font-size: 1.15rem; line-height: 1.25; }
+.twin__job { display: block; font-size: var(--size-small); color: var(--ink-soft); }
+.twin__close { display: block; margin-top: 0.2rem; font-family: var(--font-hand); font-size: 1.2rem; color: var(--accent-2); }
+.twin__score { text-align: right; font-size: 1.6rem; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.twin__bar { display: block; width: 4.5rem; height: 0.3rem; margin: 0.4rem 0 0 auto; border-radius: var(--radius-pill); background: var(--line); overflow: hidden; }
+.twin__bar::after { content: ""; display: block; width: calc(var(--share, 0) * 100%); height: 100%; background: var(--accent); }
+
+/* the chessboard */
+.chess { gap: var(--space-1); }
+.chess__lead { max-width: 26rem; font-size: clamp(1rem, 2.4vw, 1.2rem); }
+.chess__board { display: block; width: min(100%, 40rem); height: min(44vh, 26rem); touch-action: pan-y; cursor: grab; }
+.chess__moves { display: grid; width: min(100%, 34rem); min-height: 8.5rem; padding: 0; text-align: center; }
+.chess__move {
+  grid-area: 1 / 1; align-self: start;
+  opacity: 0; transform: translateY(1rem); pointer-events: none;
+  transition: opacity var(--medium) var(--ease), transform var(--medium) var(--ease);
+}
+.chess__move.is-active { opacity: 1; transform: none; pointer-events: auto; }
+.chess__tag { display: block; font-size: var(--size-small); letter-spacing: 0.08em; color: var(--accent-2); }
+.chess__title { display: block; font-size: clamp(1.5rem, 5vw, 2.1rem); line-height: 1.1; font-weight: 350; }
+.chess__text { display: block; margin-top: 0.3rem; font-size: var(--size-body); color: var(--ink-soft); }
+.chess__note { display: block; margin-top: 0.3rem; font-family: var(--font-hand); font-size: 1.35rem; color: var(--accent); }
+.chess__drag { font-size: var(--size-small); font-style: italic; color: var(--ink-soft); }
+
+/* calm mode: nothing is held; the finished board and every move are written out */
+:root[data-motion="calm"] .chess__moves { display: block; text-align: left; min-height: 0; }
+:root[data-motion="calm"] .chess__move { opacity: 1; transform: none; pointer-events: auto; margin-top: var(--space-3); }
+:root[data-motion="calm"] .chess__lead { max-width: var(--text-width); }
+:root[data-motion="calm"] .twin, :root[data-motion="calm"] .chart__planet { transform: none; }
+
+@media (max-height: 40rem) { .chess__lead { display: none; } }
