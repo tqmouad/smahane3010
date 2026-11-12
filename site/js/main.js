@@ -1,6 +1,7 @@
 import T from "./text.en.js";
 import FULL_MOONS from "./fullmoons.js";
 import { startSky } from "./sky.js";
+import { createGlobe } from "./moon.js";
 
 // ---------- facts about her day (see docs/BIRTH_SKY.md) ----------
 const BIRTH = Date.UTC(2002, 9, 30, 17, 0, 0); // 5:00 pm in Morocco, which was on UTC that day
@@ -70,10 +71,14 @@ $("moonLit").setAttribute("d", moonPath(MOON_LIT, MOON_WANING));
 // The moon was full 9.4 days before she was born, then waned to 34%.
 const NIGHTS_FROM_FULL = 9.4;
 const FINAL_ANGLE = Math.acos(2 * MOON_LIT - 1);
-function showMoon(p) { // p goes from 0 (full moon) to 1 (her moon)
-  const t = Math.min(1, p / 0.85);
-  const lit = (1 + Math.cos(t * FINAL_ANGLE)) / 2;
-  $("moonScrub").setAttribute("d", moonPath(Math.min(lit, 0.999), MOON_WANING));
+const moonCanvas = $("moonGlobe");
+moonCanvas.setAttribute("aria-label", T.moon.alt);
+const moonTint = getComputedStyle(root).getPropertyValue("--moon-rgb").split(",").map(Number);
+const renderGlobe = createGlobe(moonCanvas, "img/moon-map.jpg", moonTint);
+function showMoon(p) { // p goes from 0 to 1: the globe turns to face her, then wanes from full to her moon
+  const spin = (1 - clamp(p / 0.22)) * 1.9;
+  const t = clamp((p - 0.18) / 0.67);
+  renderGlobe(t * FINAL_ANGLE, spin);
   const nights = Math.round(NIGHTS_FROM_FULL * (1 - t));
   $("moonWhen").textContent =
     t <= 0.02 ? T.moon.full : nights > 1 ? fill(T.moon.nights, { n: nights }) : nights === 1 ? T.moon.oneNight : T.moon.yours;
@@ -340,15 +345,26 @@ function drawSignature(target) {
 }
 const signatureLine = drawSignature($("signature"));
 
-// ---------- scroll scenes ----------
-// Each tracked thing gets a number from 0 to 1 that follows the scroll.
-const tracked = [];
-const track = (node, mode, apply) => tracked.push({ node, mode, apply, last: null });
+// ---------- scroll scenes (GSAP ScrollTrigger) ----------
+// Each followed thing gets a number from 0 to 1 that glides after the scroll.
+const gsap = window.gsap, ScrollTrigger = window.ScrollTrigger;
+const animated = !reduceMotion && Boolean(gsap && ScrollTrigger);
+function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+
+const RANGES = { // where each kind of motion starts and ends: "part of the thing" + "part of the screen"
+  pin: ["top top", "bottom bottom", 0.9],
+  in: ["top 98%", "top 62%", 0.7],
+  read: ["top 92%", "top 48%", 0.5],
+  sign: ["top 95%", "top 60%", 0.9],
+  out: ["bottom 28%", "bottom top", 0.5],
+};
+const followed = [];
+const follow = (node, mode, apply) => followed.push({ node, mode, apply });
 const setVar = (node, name) => (p) => node.style.setProperty(name, p);
 
 function pinScene(id, extra) {
   const scene = $(id);
-  track(scene.parentElement, "pin", (p) => { scene.style.setProperty("--p", p); if (extra) extra(p); });
+  follow(scene.parentElement, "pin", (p) => { scene.style.setProperty("--p", p); if (extra) extra(p); });
 }
 pinScene("heroScene");
 pinScene("moonScene", showMoon);
@@ -356,8 +372,8 @@ pinScene("daysScene", showDays);
 pinScene("scorpioScene", showScorpio);
 
 document.querySelectorAll(".reveal").forEach((block) => {
-  track(block, "in", setVar(block, "--in"));
-  track(block, "out", setVar(block, "--out"));
+  follow(block, "in", setVar(block, "--in"));
+  follow(block, "out", setVar(block, "--out"));
 });
 document.querySelectorAll(".reveal .lead").forEach((lead) => { // split into words that light up one by one
   const words = lead.textContent.split(" ");
@@ -368,41 +384,67 @@ document.querySelectorAll(".reveal .lead").forEach((lead) => { // split into wor
     lead.append(span, i < words.length - 1 ? " " : "");
   });
   lead.style.setProperty("--n", words.length);
-  track(lead, "read", setVar(lead, "--lp"));
+  follow(lead, "read", setVar(lead, "--lp"));
 });
-track($("signature"), "sign", (p) => { signatureLine.style.strokeDashoffset = 1 - p; $("signature").style.setProperty("--p", p); });
-document.querySelectorAll(".song").forEach((song) => track(song, "in", setVar(song, "--p")));
+document.querySelectorAll(".song, .gallery li, .portrait, .letter").forEach((node) => follow(node, "in", setVar(node, "--p")));
+follow($("signature"), "sign", (p) => { signatureLine.style.strokeDashoffset = 1 - p; $("signature").style.setProperty("--p", p); });
 flowers.forEach((flower) => {
   const stem = flower.querySelector(".flower__stem");
-  track(flower, "in", (p) => { flower.style.setProperty("--p", p); stem.style.strokeDashoffset = clamp(1 - p * 1.8); });
+  follow(flower, "in", (p) => { flower.style.setProperty("--p", p); stem.style.strokeDashoffset = clamp(1 - p * 1.8); });
 });
 
-function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
-function measure(t, vh) {
-  const r = t.node.getBoundingClientRect();
-  if (t.mode === "pin") return clamp(-r.top / Math.max(1, r.height - vh));
-  if (t.mode === "in") return clamp((vh * 0.98 - r.top) / (vh * 0.34));
-  if (t.mode === "read") return clamp((vh * 0.92 - r.top) / (vh * 0.42));
-  if (t.mode === "sign") return clamp((vh * 0.95 - r.top) / (vh * 0.3));
-  return clamp(1 - r.bottom / (vh * 0.28)); // "out"
+if (!animated) {
+  // Animations are turned off on this device (or the animation files did not load): show everything finished.
+  followed.forEach((f) => f.apply(f.mode === "out" ? 0 : 1));
+  root.style.setProperty("--page", 1);
+} else {
+  gsap.registerPlugin(ScrollTrigger);
+  root.classList.add("is-animated");
+  const top = (node) => node.getBoundingClientRect().top + window.scrollY;
+  followed.sort((a, b) => top(a.node) - top(b.node)); // ScrollTrigger wants them made in page order
+  followed.forEach((f) => {
+    const [start, end, glide] = RANGES[f.mode];
+    const state = { p: 0 };
+    f.apply(0);
+    gsap.to(state, {
+      p: 1, ease: "none",
+      onUpdate: () => f.apply(Math.round(state.p * 1000) / 1000),
+      scrollTrigger: { trigger: f.node, start, end, scrub: glide },
+    });
+  });
+  ScrollTrigger.create({ // the thin line at the top, and the dawn at the end of the night
+    start: 0, end: "max",
+    onUpdate: (self) => {
+      root.style.setProperty("--page", self.progress.toFixed(4));
+      root.style.setProperty("--dawn", clamp((self.progress - 0.8) / 0.2).toFixed(3));
+    },
+  });
+
+  // Her name arrives letter by letter, each one turning in from deep space.
+  const name = $("heroName");
+  const letters = [...name.textContent].map((ch) => el("span", "hero__letter", ch));
+  name.setAttribute("aria-label", name.textContent);
+  const row = el("span", "hero__letters");
+  row.setAttribute("aria-hidden", "true");
+  row.append(...letters);
+  name.replaceChildren(row);
+  gsap.from(letters, { rotationY: -100, z: -500, y: 30, opacity: 0, duration: 1.5, ease: "power3.out", stagger: 0.09, delay: 0.25, transformPerspective: 700 });
+
+  // On a laptop, her drawings and portrait lean in 3D towards the mouse.
+  document.querySelectorAll(".gallery li, .portrait").forEach((holder) => {
+    gsap.set(holder, { transformPerspective: 800 });
+    const tiltX = gsap.quickTo(holder, "rotationX", { duration: 0.5, ease: "power3" });
+    const tiltY = gsap.quickTo(holder, "rotationY", { duration: 0.5, ease: "power3" });
+    holder.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse") return;
+      const r = holder.getBoundingClientRect();
+      tiltY(((e.clientX - r.left) / r.width - 0.5) * 22);
+      tiltX(-((e.clientY - r.top) / r.height - 0.5) * 22);
+    });
+    holder.addEventListener("pointerleave", () => { tiltX(0); tiltY(0); });
+  });
+
+  // Fonts and pictures can change the page height after it first appears.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
+  window.addEventListener("load", () => ScrollTrigger.refresh());
 }
-function update() {
-  const vh = window.innerHeight;
-  for (const t of tracked) {
-    const p = reduceMotion ? (t.mode === "out" ? 0 : 1) : Math.round(measure(t, vh) * 1000) / 1000;
-    if (p !== t.last) { t.last = p; t.apply(p); }
-  }
-  const room = document.documentElement.scrollHeight - vh;
-  const page = room > 0 ? clamp(window.scrollY / room) : 0;
-  root.style.setProperty("--page", page.toFixed(4));
-  root.style.setProperty("--dawn", clamp((page - 0.8) / 0.2).toFixed(3)); // the night ends in dawn
-}
-let waiting = false;
-function requestUpdate() {
-  if (waiting) return;
-  waiting = true;
-  requestAnimationFrame(() => { waiting = false; update(); });
-}
-window.addEventListener("scroll", requestUpdate, { passive: true });
-window.addEventListener("resize", requestUpdate);
-update();

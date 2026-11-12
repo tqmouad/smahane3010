@@ -50,3 +50,12 @@ Fonts are stored inside the site (self-hosted), so no outside font service is ca
 | Six drawings (`two-faces`, `skull`, `eyes-pencil`, `moon-in-your-eyes`, `framed-pair`, `fighters`) | `site/img/` | Smahane's own work, sent by the owner | Resized. The first one was a screenshot; its two app badges were painted out. `fighters` is her fan art of characters owned by someone else: fine on a private gift, remove it if the site ever carries ads. |
 | Portrait (`portrait.jpg`) | `site/img/` | A portrait of Smahane, sent by the owner | Who made the portrait was not asked. Private gift only. |
 | Arabic line under the moon | `site/js/text.en.js` | Copied from the writing on her own framed drawing | Not checked whether the line is her own words or a quote from a poem or song. |
+
+## Animation library and moon map (added 2026-11-12)
+
+| Item | Used for | Licence | Where read | Date read | Notes |
+|---|---|---|---|---|---|
+| GSAP 3.15.1 and its ScrollTrigger plugin | Scroll scenes, gliding motion, 3D tilt, the name's entrance | GSAP Standard "No Charge" License. Not open source. Free for commercial sites. Not allowed inside no-code animation builders that compete with Webflow. Webflow may change the terms for future versions; a version already in use stays under its old terms. | Copies of the licence text shown in web search results (gsap.com page, Wind River and ScanCode licence lists). The official page could not be opened directly from this session. | 2026-11-12 | Copied unchanged into `site/vendor/` from the npm package. `npm audit` on that version reported no known problems. Requested by the owner. |
+| greensock/gsap-skills | Reading only, as a guide to correct GSAP use | MIT (licence file in the repo) | The repo's `LICENSE` file | 2026-11-12 | Nothing from it is in the site. |
+| Motion (motiondivision/motion) | Not used | MIT | `LICENSE.md` in the repo | 2026-11-12 | Read because the owner suggested it. Left out because GSAP does the same job. |
+| Moon surface map (`site/img/moon-map.jpg`) | The 3D moon globe | Made by our own code, so no outside licence | n/a | 2026-11-12 | It is a drawing by code, not a photograph. Dark "seas" and bright craters are placed roughly where the real ones are, from memory. NASA's real map would be better but nasa.gov could not be reached from this session. |

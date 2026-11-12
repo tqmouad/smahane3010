@@ -51,7 +51,8 @@ Not received yet: `new-website-playbook.md` and `security-checklist.md` (owner m
 
 ## How the site is built
 
-- Plain files in `site/`: no packages, no build step. Cloudflare Pages setting: build command empty, output folder `site`.
+- Plain files in `site/`: no build step. One outside library, GSAP 3.15.1 with ScrollTrigger, copied into `site/vendor/` (see `docs/LICENSES.md`).
+- `site/js/moon.js`: the 3D moon globe, drawn on a canvas with no 3D library. `site/img/moon-map.jpg` is its surface, made by code. Cloudflare Pages setting: build command empty, output folder `site`.
 - `site/js/text.en.js`: every word on the site.
 - `site/css/tokens.css`: every colour and size, for both skies.
 - `site/css/site.css`: layout and motion. `site/js/main.js`: page logic. `site/js/sky.js`: star field.
@@ -68,6 +69,7 @@ Not received yet: `new-website-playbook.md` and `security-checklist.md` (owner m
 | 2b. Scroll scenes | Built on branch `build/v2-scroll-scenes`. Pinned scenes driven by the scroll: name flies in, moon wanes from full (21 Oct) to her crescent, day counter counts up, Scorpio is drawn, songs slide in, flowers grow, lead text lights up word by word, stars streak when scrolling fast, night turns to dawn at the end. No packages. Pin lengths are in `tokens.css`. |
 | 2c. Letter, wall, portrait | Built on branch `build/v3-letter-gallery`. Letter (A2 English, half friend half love, approved by owner), signature with no name (two ink knots tied by one line, drawn by the scroll), her six drawings in `site/img/` with tap-to-enlarge, her portrait as its own scene, her Arabic moon line under the moon facts, flowers redrawn as ink lines to match her art ("my ink is black"). Voice section is hidden until audio files are listed in `text.en.js`. Empty flower memories show a gentle default line. |
 | 2d. Memories and prayer | Same branch. All 24 flower memories written from the owner's notes (in `text.en.js`). Year 16 (2018) carries her late father's name, a short Arabic dua and a quiet ink drawing of a grave. Signature changed to two moons tied by one line: her crescent and the owner's full moon (born 13/7/2003, moon 99.8% lit by PyEphem). Guesses to confirm with owner: meeting placed in Year 20 (2022), engagement in Year 21 (2023); mother's name spelled "Zined" as typed; years 3, 5, 11, 12, 13, 15, 17, 19 are gentle filler lines, not real events. |
+| 2e. 3D and GSAP | Branch `build/v4-3d-gsap`. Scroll scenes now run on GSAP ScrollTrigger and glide after the finger. 3D: star field with real depth (scrolling flies forward), moon globe that turns and wanes, name arrives letter by letter, songs swing in like doors, flowers spin up, drawings flip onto the wall and tilt under a mouse, letter unfolds. Owner confirmed earlier animations do show on his iPhone and Windows laptop. |
 | 3. Owner's content | Received: letter, six drawings, portrait. Still waiting for: audios, flower memories, extra song picks (all optional) |
 | 4. Deploy to Cloudflare Pages | Not done. Owner must connect the repo in Cloudflare. |
 

@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/site.css">
   <script src="js/theme.js"></script>
+  <script src="vendor/gsap.min.js" defer></script>
+  <script src="vendor/ScrollTrigger.min.js" defer></script>
   <script type="module" src="js/main.js"></script>
 </head>
 <body>
@@ -68,11 +70,7 @@
     <section class="pin pin--moon" aria-labelledby="moonTitle">
       <div class="pin__stick" id="moonScene">
         <div class="moonwrap">
-          <svg class="bigmoon" viewBox="0 0 200 200" role="img" aria-labelledby="moonAlt">
-            <title id="moonAlt" data-t="moon.alt"></title>
-            <circle class="moon__dark" cx="100" cy="100" r="80"></circle>
-            <path class="moon__lit" id="moonScrub" d=""></path>
-          </svg>
+<canvas class="bigmoon" id="moonGlobe" width="420" height="420" role="img"></canvas>
         </div>
         <p class="hand moon__when" id="moonWhen" aria-hidden="true"></p>
         <h2 id="moonTitle" data-t="moon.title"></h2>
