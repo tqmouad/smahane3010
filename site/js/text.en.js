@@ -96,7 +96,7 @@ export default {
     // One memory per year, first to last. Year 16 is special: it also carries a prayer.
     memories: [
       "Life gave me the mother of my children. Your father named you Smahane, after the singer he loved. And in July, a boy was born who would one day look for you.",
-      "You were very small, and two people loved you very much: your mother Zined and your father Bouzekri.",
+      "You were very small, and two people loved you very much: your mother Zineb and your father Bouzekri.",
       "Still little, still loved. Your home in Krazza was your whole world.",
       "You found Spacetoon. Remi, Al Qannas, Ahd Al Asdiqaa... you loved them all.",
       "More cartoons, more songs. I think you still know every word.",
