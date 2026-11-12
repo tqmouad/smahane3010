@@ -1,7 +1,7 @@
-import T from "./text.en.js?v=8";
-import FULL_MOONS from "./fullmoons.js?v=8";
-import { startSky } from "./sky.js?v=8";
-import { createGlobe } from "./moon.js?v=8";
+import T from "./text.en.js?v=9";
+import FULL_MOONS from "./fullmoons.js?v=9";
+import { startSky } from "./sky.js?v=9";
+import { createGlobe } from "./moon.js?v=9";
 
 // ---------- facts about her day (see docs/BIRTH_SKY.md) ----------
 const BIRTH = Date.UTC(2002, 9, 30, 17, 0, 0); // 5:00 pm in Morocco, which was on UTC that day

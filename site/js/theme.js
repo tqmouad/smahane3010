@@ -6,10 +6,9 @@
     sky = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "golden" : "night";
   }
   // "full" = all the movement. "calm" = stars drift slowly and things fade in, but nothing flies or spins.
-  // If she has not chosen, follow the device: a device set to "reduce motion" starts calm.
-  if (motion !== "full" && motion !== "calm") {
-    motion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "calm" : "full";
-  }
+  // The site always starts with full motion (the owner's choice), whatever the device setting says.
+  // It is calm only if she turned the Motion switch off herself on this device.
+  if (motion !== "calm") motion = "full";
   root.setAttribute("data-theme", sky);
   root.setAttribute("data-motion", motion);
 })();
