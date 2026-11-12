@@ -1,0 +1,560 @@
+/* Layout and motion. Colours and sizes come from tokens.css. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; background: var(--page-bg); }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--size-body);
+  line-height: 1.65;
+  font-variation-settings: "SOFT" 100, "WONK" 0;
+  transition: color var(--slow) var(--ease);
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+h1, h2, h3, p, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+
+.hand { font-family: var(--font-hand); font-size: var(--size-hand); line-height: 1.25; color: var(--accent); }
+
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; border-radius: 0.4rem; }
+
+.skip {
+  position: absolute; left: var(--space-2); top: -6rem; z-index: 20;
+  padding: var(--space-2) var(--space-3); min-height: var(--tap);
+  background: var(--card-strong); color: var(--ink); border-radius: var(--radius-pill);
+}
+.skip:focus { top: var(--space-2); }
+
+/* ---------- the sky ---------- */
+
+.sky { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
+.sky__layer { position: absolute; inset: 0; }
+.sky__layer--golden {
+  background: linear-gradient(180deg, var(--golden-1) 0%, var(--golden-2) 48%, var(--golden-3) 78%, var(--golden-4) 100%);
+}
+.sky__layer--night {
+  background:
+    radial-gradient(120% 70% at 50% 110%, var(--night-4) 0%, transparent 60%),
+    linear-gradient(180deg, var(--night-1) 0%, var(--night-2) 45%, var(--night-3) 100%);
+  opacity: var(--stars-opacity);
+  transition: opacity var(--slow) var(--ease);
+}
+.sky__sun {
+  position: absolute; right: 8%; bottom: 6%;
+  width: min(46vw, 22rem); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle, var(--sun-core) 0 14%, var(--sun-halo) 24%, transparent 68%);
+  opacity: var(--sun-opacity);
+  transform: translateY(calc((1 - var(--sun-opacity)) * 45vh));
+  transition: opacity var(--slow) var(--ease), transform var(--slow) var(--ease);
+}
+.sky__stars {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  opacity: var(--stars-opacity);
+  transition: opacity var(--slow) var(--ease);
+}
+
+/* ---------- the switch ---------- */
+
+.top {
+  position: fixed; z-index: 10;
+  top: max(var(--space-2), env(safe-area-inset-top)); right: max(var(--space-2), env(safe-area-inset-right));
+}
+.switch {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  min-height: var(--tap); padding: 0.35rem 0.9rem;
+  font: inherit; font-size: var(--size-small); color: var(--ink);
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-pill);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: color var(--slow) var(--ease), background var(--slow) var(--ease), border-color var(--slow) var(--ease);
+}
+.switch__label { opacity: 0.55; transition: opacity var(--medium); }
+:root[data-theme="golden"] .switch__label--golden,
+:root[data-theme="night"] .switch__label--night { opacity: 1; font-weight: 600; }
+.switch__track {
+  position: relative; width: 3.25rem; height: 1.75rem; flex: none;
+  border-radius: var(--radius-pill); border: 1px solid var(--line);
+  background: linear-gradient(90deg, var(--golden-3), var(--night-3));
+}
+.switch__knob {
+  position: absolute; top: 50%; left: 0.2rem; width: 1.25rem; height: 1.25rem;
+  margin-top: -0.625rem; border-radius: 50%;
+  background: var(--sun-core);
+  box-shadow: 0 0 0.6rem var(--sun-halo);
+  transition: transform var(--medium) var(--ease), box-shadow var(--medium) var(--ease), background var(--medium);
+}
+:root[data-theme="night"] .switch__knob {
+  transform: translateX(1.5rem);
+  background: transparent;
+  box-shadow: inset 0.42rem -0.1rem 0 0 var(--moon-lit);
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  position: relative;
+  min-height: 100vh; min-height: 100svh;
+  display: grid; align-content: center; justify-items: center; text-align: center;
+  padding: var(--space-5) var(--space-3);
+}
+.hero__moon {
+  position: absolute; top: 12%; right: 10%;
+  width: clamp(4.5rem, 16vw, 9rem);
+  opacity: var(--moon-opacity);
+  transform: translateY(calc((1 - var(--moon-opacity)) * 30vh)) rotate(-18deg);
+  filter: drop-shadow(0 0 1.4rem var(--glow));
+  transition: opacity var(--slow) var(--ease), transform var(--slow) var(--ease);
+}
+.hero__name {
+  font-size: var(--size-hero); font-weight: 300; line-height: 0.95; letter-spacing: -0.035em;
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+  text-shadow: 0 0 0.5em var(--glow);
+  animation: rise 1.6s var(--ease) both 0.2s;
+}
+.hero__kicker { animation: rise 1.6s var(--ease) both; }
+.hero__line {
+  margin-top: var(--space-2);
+  font-style: italic; font-size: var(--size-lead); letter-spacing: 0.08em; color: var(--ink-soft);
+  animation: rise 1.6s var(--ease) both 0.5s;
+}
+.hero__scroll {
+  position: absolute; bottom: max(var(--space-4), env(safe-area-inset-bottom)); left: 0; right: 0;
+  font-size: var(--size-small); color: var(--ink-soft);
+  animation: rise 1.6s var(--ease) both 1.4s, float 3.5s ease-in-out infinite 3s;
+}
+
+/* ---------- blocks ---------- */
+
+.block {
+  width: min(100% - 2.5rem, var(--text-width));
+  margin-inline: auto; padding-block: var(--space-section);
+}
+.block--wide, .block--split { width: min(100% - 2.5rem, var(--page-width)); }
+.block--center { text-align: center; }
+.block--center .lead { margin-inline: auto; }
+
+h2 {
+  font-size: var(--size-h2); font-weight: 350; line-height: 1.05; letter-spacing: -0.02em;
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+  margin-bottom: var(--space-3);
+}
+.lead { font-size: var(--size-lead); color: var(--ink-soft); max-width: var(--text-width); }
+.hint { margin-top: var(--space-3); }
+
+.block--split { display: grid; gap: var(--space-4); align-items: center; }
+@media (min-width: 48rem) {
+  .block--split { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr); gap: var(--space-5); }
+}
+
+.facts {
+  display: grid; gap: var(--space-2); margin-top: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  text-align: left;
+}
+.facts--stack { grid-template-columns: 1fr; }
+.facts--four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 48rem) { .facts--four { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.fact {
+  padding: var(--space-3); border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--card);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  transition: background var(--slow), border-color var(--slow);
+}
+.fact__big {
+  display: block; font-size: 1.7rem; line-height: 1.15; color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.fact__small { display: block; margin-top: 0.35rem; font-size: var(--size-small); color: var(--ink-soft); }
+
+/* ---------- moon ---------- */
+
+.moonwrap { display: grid; place-items: center; animation: float 9s ease-in-out infinite; }
+.bigmoon {
+  width: min(70vw, 20rem);
+  transform: rotate(-18deg);
+  filter: drop-shadow(0 0 2.5rem var(--glow));
+}
+.moon__dark { fill: var(--moon-dark); stroke: var(--line); stroke-width: 1; }
+.moon__lit { fill: var(--moon-lit); }
+
+/* ---------- days ---------- */
+
+.bignumber {
+  margin-block: var(--space-2);
+  font-size: var(--size-big-number); font-weight: 250; line-height: 1; letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums; color: var(--accent);
+  text-shadow: 0 0 0.6em var(--glow);
+}
+.bignumber__unit { font-size: 0.28em; letter-spacing: 0.02em; font-style: italic; color: var(--ink-soft); text-shadow: none; }
+
+/* ---------- scorpio ---------- */
+
+.scorpio { display: block; width: min(100%, 30rem); margin: var(--space-3) auto; overflow: visible; }
+.scorpio__line {
+  fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0.85;
+}
+.scorpio__star { fill: var(--ink); opacity: 0; transform-box: fill-box; transform-origin: center; }
+.scorpio__star--heart { fill: var(--antares); filter: drop-shadow(0 0 6px var(--antares)); }
+.scorpio__label { font-family: var(--font-hand); font-size: 22px; fill: var(--accent-2); opacity: 0; }
+
+/* ---------- songs ---------- */
+
+.songs { display: grid; gap: var(--space-1); margin-top: var(--space-4); }
+.song {
+  display: grid; grid-template-columns: 2.25rem 1fr auto; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  border: 1px solid var(--line); border-radius: var(--radius); background: var(--card);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+.song::before { content: "\266A"; font-size: 1.5rem; color: var(--accent); }
+.song__title { display: block; font-size: 1.15rem; line-height: 1.25; }
+.song__artist { display: block; font-size: var(--size-small); color: var(--ink-soft); }
+.song__tag { display: inline-block; margin-top: 0.2rem; font-family: var(--font-hand); font-size: 1.2rem; color: var(--accent-2); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: var(--tap); min-width: var(--tap); padding: 0.4rem 1.1rem;
+  font: inherit; font-size: var(--size-small); color: var(--ink); text-decoration: none;
+  background: transparent; border: 1px solid var(--line); border-radius: var(--radius-pill);
+  cursor: pointer; transition: background var(--medium), border-color var(--medium);
+}
+.btn:hover { background: var(--card); border-color: var(--accent); }
+
+/* ---------- garden ---------- */
+
+.garden {
+  display: grid; gap: var(--space-2) var(--space-1); margin-top: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(5.25rem, 1fr));
+  align-items: end;
+}
+.flower {
+  display: grid; justify-items: center; width: 100%; min-height: var(--tap); padding: 0.25rem;
+  font: inherit; color: var(--ink-soft); background: none; border: 0; border-radius: var(--radius);
+  cursor: pointer;
+}
+.flower svg { width: 100%; max-width: 6.5rem; height: auto; overflow: visible; }
+.flower__year { font-family: var(--font-hand); font-size: 1.25rem; line-height: 1; }
+.flower__stem { fill: none; stroke: var(--stem); stroke-width: 2.4; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.flower__leaf { fill: var(--stem); opacity: 0; }
+.flower__head { transform-origin: 50px 52px; transform: scale(0) rotate(-40deg); }
+.flower__heart { fill: var(--flower-heart); }
+.petal-1 { fill: var(--petal-1); } .petal-2 { fill: var(--petal-2); } .petal-3 { fill: var(--petal-3); }
+.petal-4 { fill: var(--petal-4); } .petal-5 { fill: var(--petal-5); } .petal-6 { fill: var(--petal-6); }
+.flower ellipse { stroke: var(--line); stroke-width: 0.6; opacity: 0.92; }
+
+.flower:hover .flower__head, .flower:focus-visible .flower__head { filter: drop-shadow(0 0 0.5rem var(--glow)); }
+.flower:hover svg, .flower:focus-visible svg { transform: translateY(-4px) rotate(-3deg); }
+.flower svg { transition: transform var(--medium) var(--ease); }
+
+.memory {
+  width: min(100% - 2rem, 26rem); padding: var(--space-4) var(--space-3); text-align: center;
+  color: var(--ink); background: var(--card-strong);
+  border: 1px solid var(--line); border-radius: var(--radius);
+}
+.memory::backdrop { background: rgba(3, 4, 15, 0.6); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.memory[open] { animation: rise 0.6s var(--ease); }
+.memory h3 { font-size: 1.9rem; font-weight: 350; line-height: 1.1; }
+.memory p { margin-top: var(--space-1); }
+.memory .memory__close { margin-top: var(--space-3); }
+.memory__flower svg { width: 7rem; height: auto; overflow: visible; }
+
+/* ---------- voice, gallery, letter ---------- */
+
+.voice { display: flex; align-items: center; gap: 3px; height: 6rem; margin-top: var(--space-4); }
+.voice span {
+  flex: 1; height: 100%; border-radius: var(--radius-pill); background: var(--accent);
+  transform: scaleY(0.12); opacity: 0.75;
+  animation: wave 2.4s ease-in-out infinite; animation-delay: calc(var(--i) * -0.11s);
+}
+.placeholder { margin-top: var(--space-2); font-size: var(--size-small); color: var(--ink-soft); font-style: italic; }
+
+.gallery { display: grid; gap: var(--space-2); margin-top: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); }
+.frame {
+  aspect-ratio: 4 / 5; display: grid; place-items: center; padding: var(--space-2); text-align: center;
+  font-size: var(--size-small); font-style: italic; color: var(--ink-soft);
+  border: 1.5px dashed var(--line); border-radius: var(--radius); background: var(--card);
+}
+.frame:nth-child(odd) { transform: rotate(-1.5deg); }
+.frame:nth-child(even) { transform: rotate(1.2deg); }
+
+.letter {
+  padding: var(--space-4) var(--space-3); border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--card); font-family: var(--font-hand); font-size: var(--size-hand); line-height: 1.4;
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+.letter p + p { margin-top: var(--space-2); }
+.letter__sign { margin-top: var(--space-3); text-align: right; }
+
+.foot { padding: var(--space-5) var(--space-3) calc(var(--space-5) + env(safe-area-inset-bottom)); text-align: center; }
+.foot__small { margin-top: var(--space-1); font-size: var(--size-small); color: var(--ink-soft); }
+.noscript { padding: var(--space-4); text-align: center; }
+
+/* ---------- motion ---------- */
+
+@keyframes rise { from { opacity: 0; transform: translateY(1.5rem); } to { opacity: 1; transform: none; } }
+@keyframes float { 50% { transform: translateY(-0.5rem); } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes fade { to { opacity: 1; } }
+@keyframes pop { 0% { opacity: 0; transform: scale(0); } 60% { opacity: 1; transform: scale(1.8); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes bloom { to { transform: scale(1) rotate(0deg); } }
+@keyframes wave { 50% { transform: scaleY(var(--h, 0.6)); } }
+
+
+/* ---------- scroll scenes (numbers --p, --in, --out are set by js/main.js while scrolling) ---------- */
+
+.defs { position: absolute; width: 0; height: 0; }
+
+.progress {
+  position: fixed; z-index: 11; top: 0; left: 0; width: 100%; height: 3px;
+  transform-origin: left; transform: scaleX(var(--page, 0));
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.sky__layer--dawn {
+  background: linear-gradient(180deg, var(--dawn-1) 0%, var(--dawn-2) 55%, var(--dawn-3) 85%, var(--dawn-4) 100%);
+  opacity: calc(var(--dawn, 0) * var(--stars-opacity));
+}
+.sky__stars { opacity: calc(var(--stars-opacity) * (1 - var(--dawn, 0) * 0.7)); }
+
+.pin { position: relative; height: var(--pin-length); }
+.pin--hero { --pin-length: var(--pin-hero); }
+.pin--moon { --pin-length: var(--pin-moon); }
+.pin--days { --pin-length: var(--pin-days); }
+.pin--scorpio { --pin-length: var(--pin-scorpio); }
+.pin__stick {
+  --p: 0;
+  position: sticky; top: 0; height: 100vh; height: 100svh;
+  display: grid; align-content: center; justify-items: center; gap: var(--space-2);
+  padding: var(--space-5) var(--space-3); text-align: center; overflow: hidden;
+}
+.pin__stick h2 { margin-bottom: 0; }
+.block--after { padding-top: 0; }
+
+/* hero: the name flies towards you, the moon swings across the sky */
+.hero { min-height: 0; }
+.hero__name {
+  animation-fill-mode: backwards; will-change: transform, opacity;
+  transform: scale(calc(1 + var(--p) * 0.9));
+  opacity: clamp(0, calc(1.25 - var(--p) * 2.2), 1);
+  filter: blur(calc(var(--p) * 12px));
+}
+.hero__kicker { animation-fill-mode: backwards; opacity: clamp(0, calc(1 - var(--p) * 3.5), 1); transform: translateY(calc(var(--p) * -7rem)); }
+.hero__line { animation-fill-mode: backwards; opacity: clamp(0, calc(1 - var(--p) * 3.5), 1); transform: translateY(calc(var(--p) * 7rem)); }
+.hero__scroll { animation: rise 1.6s var(--ease) backwards 1.4s; opacity: clamp(0, calc(1 - var(--p) * 10), 1); }
+.hero__moon {
+  transform:
+    translate(calc(var(--p) * -34vw), calc((1 - var(--moon-opacity)) * 30vh + var(--p) * 28vh))
+    rotate(calc(-18deg - var(--p) * 24deg))
+    scale(calc(1 + var(--p) * 1.8));
+  transition: opacity var(--slow) var(--ease);
+}
+
+/* moon: nine nights of waning, from full to her crescent */
+.pin--moon .moonwrap { animation: none; transform: scale(calc(0.72 + var(--p) * 0.28)); }
+.bigmoon { width: min(62vw, 42vh, 20rem); transform: rotate(calc(-18deg - (1 - var(--p)) * 50deg)); }
+.moon__when { min-height: 1.3em; }
+
+/* days: the number grows as it counts */
+.pin--days .bignumber { transform: scale(calc(0.72 + var(--p) * 0.28)); }
+
+/* scorpio: drawn by the scroll */
+.scorpio { width: auto; max-width: 100%; height: min(50vh, 26rem); margin: 0 auto; }
+.scorpio__star {
+  opacity: clamp(0, calc(var(--p) * 19 - var(--i)), 1);
+  transform: scale(clamp(0, calc(var(--p) * 19 - var(--i)), 1));
+}
+.scorpio__label { opacity: clamp(0, calc(var(--p) * 10 - 3.4), 1); }
+.scorpio__note { max-width: var(--text-width); opacity: clamp(0, calc(var(--p) * 8 - 6.6), 1); transform: translateY(calc(clamp(0, calc(7.6 - var(--p) * 8), 1) * 1.5rem)); }
+
+/* every other part: rises, settles, then drifts away */
+.reveal > * {
+  opacity: calc(var(--in, 1) * (1 - var(--out, 0)));
+  transform: translateY(calc((1 - var(--in, 1)) * 3.5rem - var(--out, 0) * 2.5rem)) scale(calc(0.93 + var(--in, 1) * 0.07));
+}
+.reveal > *:nth-child(2) { transform: translateY(calc((1 - var(--in, 1)) * 6rem - var(--out, 0) * 2.5rem)) scale(calc(0.93 + var(--in, 1) * 0.07)); }
+.reveal > *:nth-child(n + 3) { transform: translateY(calc((1 - var(--in, 1)) * 9rem - var(--out, 0) * 2.5rem)) scale(calc(0.93 + var(--in, 1) * 0.07)); }
+.reveal > .songs, .reveal > .garden { opacity: 1; transform: none; }
+
+/* lead text lights up word by word */
+.lead .w { opacity: clamp(0.22, calc(var(--lp, 1) * var(--n) * 1.2 - var(--w) + 0.22), 1); transition: opacity 0.35s ease; }
+
+/* songs slide in from both sides */
+.song {
+  --dir: 1;
+  opacity: var(--p, 1);
+  transform: translateX(calc((1 - var(--p, 1)) * var(--dir) * 30%)) rotate(calc((1 - var(--p, 1)) * var(--dir) * 5deg));
+}
+.song:nth-child(odd) { --dir: -1; }
+
+/* flowers grow as their row arrives */
+.flower__stem { stroke-dashoffset: 0; }
+.flower__leaf { opacity: clamp(0, calc(var(--p, 1) * 3 - 1), 1); }
+.flower__head { transform: scale(clamp(0, calc(var(--p, 1) * 2 - 0.75), 1)) rotate(calc((1 - var(--p, 1)) * -70deg)); }
+
+
+/* ---------- ink flowers, her wall, the letter's signature ---------- */
+
+.flower .petal { fill: var(--petal-fill); stroke: var(--ink); stroke-width: 1.1; opacity: 0.9; }
+.flower__stem { stroke: var(--ink); stroke-width: 1.6; }
+.flower__leaf { fill: none; stroke: var(--ink); stroke-width: 1.2; }
+.flower__heart { fill: var(--accent); }
+
+.quote { margin: var(--space-4) 0 0; text-align: center; }
+.quote__ar { margin: 0 0 var(--space-1); font-size: clamp(1.5rem, 5vw, 2.1rem); line-height: 1.7; color: var(--ink); }
+
+.gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3) var(--space-2); align-items: center; }
+@media (min-width: 48rem) { .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4) var(--space-3); } }
+.frame {
+  aspect-ratio: auto; display: block; width: 100%; padding: var(--space-1);
+  font: inherit; cursor: pointer;
+  border: 1px solid var(--line); border-radius: 0.5rem; background: var(--paper);
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.35);
+  transition: transform var(--medium) var(--ease), box-shadow var(--medium) var(--ease);
+}
+.frame img { display: block; width: 100%; height: auto; border-radius: 0.2rem; }
+.gallery li:nth-child(odd) .frame { transform: rotate(-2deg); }
+.gallery li:nth-child(even) .frame { transform: rotate(1.6deg); }
+.gallery li .frame:hover, .gallery li .frame:focus-visible { transform: rotate(0deg) scale(1.04); box-shadow: 0 0 2.5rem var(--glow); }
+
+.viewer {
+  max-width: min(100% - 1.5rem, 60rem); max-height: calc(100% - 1.5rem); padding: var(--space-2);
+  background: var(--paper); border: 0; border-radius: 0.6rem; text-align: center;
+}
+.viewer::backdrop { background: rgba(3, 4, 15, 0.82); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.viewer[open] { animation: rise 0.5s var(--ease); }
+.viewer img { display: block; max-width: 100%; max-height: 76vh; width: auto; height: auto; margin: 0 auto; }
+.viewer__close { margin-top: var(--space-2); }
+.viewer .btn { color: var(--paper-ink); border-color: var(--paper-ink); }
+
+.signature { display: block; width: min(70%, 15rem); height: auto; margin: var(--space-1) 0 0 auto; overflow: visible; }
+.signature__line { fill: none; stroke: var(--ink); stroke-width: 0.9; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+
+.portrait { width: min(100%, 22rem); margin: var(--space-2) auto var(--space-3); }
+.portrait .frame { transform: rotate(-1.5deg); }
+.portrait .frame:hover, .portrait .frame:focus-visible { transform: rotate(0deg) scale(1.03); box-shadow: 0 0 2.5rem var(--glow); }
+.signature__line { stroke-width: 0.7; }
+
+/* ---------- her father's year, and the two-moon signature ---------- */
+
+.flower--star .flower__year::after { content: " \2726"; color: var(--accent); }
+.grave { width: 7rem; height: auto; overflow: visible; }
+.grave__ink { fill: none; stroke: var(--ink); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.grave__ink--soft { opacity: 0.45; }
+.grave__heart { fill: var(--accent); }
+.grave__star { fill: var(--accent); filter: drop-shadow(0 0 4px var(--glow)); }
+.memory { max-height: calc(100% - 2rem); overflow-y: auto; }
+.memory__prayer { margin-top: var(--space-3); padding-top: var(--space-3); border-top: 1px solid var(--line); }
+.memory__name { font-size: 1.15rem; }
+.memory__dua { font-size: 1.45rem; line-height: 1.9; color: var(--accent); }
+.memory__meaning { font-size: var(--size-small); font-style: italic; color: var(--ink-soft); }
+
+.signature { width: min(85%, 17rem); }
+.signature__disc { fill: var(--moon-back); stroke: var(--line); stroke-width: 0.6; }
+.signature__moons { opacity: clamp(0, calc(var(--p, 1) * 3 - 2), 1); }
+.signature__moons .moon__lit { filter: drop-shadow(0 0 3px var(--glow)); }
+.signature__note { margin-top: var(--space-1); text-align: right; font-size: var(--size-small); font-style: italic; color: var(--ink-soft); }
+
+/* ---------- 3D: the moon globe, depth, and turning in space ---------- */
+
+.pin--moon .moonwrap { position: relative; }
+.pin--moon .moonwrap::before {
+  content: ""; position: absolute; inset: -22%; border-radius: 50%; z-index: -1;
+  background: radial-gradient(circle, var(--glow) 0%, transparent 62%);
+  opacity: calc(0.25 + var(--p) * 0.35);
+}
+canvas.bigmoon { display: block; aspect-ratio: 1; height: auto; filter: none; transform: rotate(calc(-18deg - (1 - var(--p)) * 30deg)); }
+
+.is-animated .hero__name { animation: none; }
+.hero__letters { display: inline-block; }
+.hero__letter { display: inline-block; will-change: transform, opacity; }
+
+/* songs turn in like doors, from both sides */
+.song {
+  transform-origin: calc(50% - var(--dir) * 50%) 50%;
+  transform: perspective(900px) translateX(calc((1 - var(--p, 1)) * var(--dir) * 12%)) rotateY(calc((1 - var(--p, 1)) * var(--dir) * -70deg));
+}
+
+/* flowers spin up out of the ground */
+.flower svg { transform: perspective(420px) rotateY(calc((1 - var(--p, 1)) * 170deg)); }
+
+/* her drawings flip onto the wall */
+.gallery li { --flip: 1; }
+.gallery li:nth-child(odd) { --flip: -1; }
+.gallery li .frame, .portrait .frame {
+  opacity: clamp(0, calc(var(--p, 1) * 2.5), 1);
+  transform: perspective(900px) rotateY(calc((1 - var(--p, 1)) * var(--flip, 1) * 80deg)) rotate(calc(var(--flip, 1) * 1.8deg)) scale(calc(0.8 + var(--p, 1) * 0.2));
+}
+.gallery li .frame:hover, .gallery li .frame:focus-visible, .portrait .frame:hover, .portrait .frame:focus-visible { transform: scale(1.04); }
+.reveal > .gallery, .reveal > .portrait { opacity: 1; transform: none; }
+
+/* the letter unfolds like paper */
+.reveal > .letter {
+  transform-origin: 50% 0%;
+  opacity: clamp(0, calc(var(--p, 1) * 3), 1);
+  transform: perspective(1000px) rotateX(calc((1 - var(--p, 1)) * -82deg));
+}
+
+/* fact cards tip up as their section arrives */
+.reveal > .facts { perspective: 900px; }
+.reveal .fact { transform: rotateX(calc((1 - var(--in, 1)) * 38deg)); transform-origin: 50% 100%; }
+
+/* ---------- her drawings in a 3D ring, the moon she can turn, and things arriving one by one ---------- */
+
+.pin--wall { --pin-length: var(--pin-wall); }
+.ring-stage { --w: min(52vw, 30vh, 15rem); width: 100%; height: calc(var(--w) * 1.45); display: grid; place-items: center; perspective: 1000px; }
+.ring {
+  --step: calc(360deg / var(--count, 6));
+  position: relative; width: var(--w); height: calc(var(--w) * 1.3); transform-style: preserve-3d;
+  transform: translateZ(calc(var(--w) * -1.05)) rotateX(-6deg) rotateY(calc(var(--p) * (var(--count, 6) - 1) * var(--step) * -1)) scale(calc(0.55 + clamp(0, calc(var(--p) * 8), 1) * 0.45));
+}
+.ring__item {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  transform: rotateY(calc(var(--i) * var(--step))) translateZ(calc(var(--w) * 1.05));
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.ring__item .frame { transform: none; opacity: 1; }
+.ring__item .frame img { max-height: calc(var(--w) * 1.2); width: auto; max-width: 100%; margin: 0 auto; }
+.ring__item .frame:hover, .ring__item .frame:focus-visible { transform: scale(1.04); box-shadow: 0 0 2.5rem var(--glow); }
+
+canvas.bigmoon { touch-action: pan-y; cursor: grab; }
+.moon__drag { font-size: var(--size-small); font-style: italic; color: var(--ink-soft); opacity: clamp(0, calc(var(--p) * 6 - 4.6), 1); }
+
+/* cards arrive one after another instead of all at once */
+.reveal .fact { --k: 0; opacity: clamp(0, calc(var(--in, 1) * 4.2 - var(--k)), 1); transform: translateY(calc(clamp(0, calc(1 - (var(--in, 1) * 4.2 - var(--k))), 1) * 3rem)) rotateX(calc(clamp(0, calc(1 - (var(--in, 1) * 4.2 - var(--k))), 1) * 55deg)); }
+.reveal .fact:nth-child(2) { --k: 0.9; }
+.reveal .fact:nth-child(3) { --k: 1.8; }
+.reveal .fact:nth-child(4) { --k: 2.7; }
+
+
+/* ---------- calm mode (set by js/theme.js; the Motion switch at the top changes it) ---------- */
+/* Stars still drift slowly and words still fade in as you scroll, but nothing flies, spins or holds the screen. */
+
+.switch--motion { margin-right: var(--space-1); }
+.switch--motion .switch__label { opacity: 1; }
+.switch--motion .switch__track { background: var(--card); }
+.switch--motion .switch__knob, :root[data-theme="night"] .switch--motion .switch__knob { background: var(--ink-soft); box-shadow: none; transform: none; }
+:root[data-motion="full"] .switch--motion .switch__knob { background: var(--accent); box-shadow: 0 0 0.6rem var(--glow); transform: translateX(1.5rem); }
+.top { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-1); }
+
+:root[data-motion="calm"] { scroll-behavior: auto; }
+:root[data-motion="calm"] *, :root[data-motion="calm"] *::before, :root[data-motion="calm"] *::after {
+  animation-duration: 0.01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important;
+}
+:root[data-motion="calm"] .voice span { transform: scaleY(var(--h, 0.6)); }
+:root[data-motion="calm"] .pin { height: auto; }
+:root[data-motion="calm"] .pin__stick { position: static; height: auto; padding-block: var(--space-section); }
+:root[data-motion="calm"] .reveal > *, :root[data-motion="calm"] .reveal .fact, :root[data-motion="calm"] .song,
+:root[data-motion="calm"] .flower svg, :root[data-motion="calm"] .flower__head, :root[data-motion="calm"] .reveal > .letter,
+:root[data-motion="calm"] .portrait .frame, :root[data-motion="calm"] .hero__name, :root[data-motion="calm"] .hero__moon,
+:root[data-motion="calm"] canvas.bigmoon, :root[data-motion="calm"] .pin--moon .moonwrap, :root[data-motion="calm"] .pin--days .bignumber { transform: none; }
+:root[data-motion="calm"] .hero__name { filter: none; }
+:root[data-motion="calm"] .ring-stage { height: auto; perspective: none; }
+:root[data-motion="calm"] .ring { width: 100%; height: auto; transform: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+:root[data-motion="calm"] .ring__item { position: static; transform: none; }

@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>Smahane, in bloom since 30/10/2002</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/tokens.css?v=10">
+  <link rel="stylesheet" href="css/site.css?v=10">
+  <script src="js/theme.js?v=10"></script>
+  <script src="vendor/gsap.min.js?v=10" defer></script>
+  <script src="vendor/ScrollTrigger.min.js?v=10" defer></script>
+  <script type="module" src="js/main.js?v=10"></script>
+</head>
+<body>
+  <a class="skip" href="#story" data-t="nav.skip"></a>
+
+  <!-- The sky sits behind everything -->
+  <div class="sky" aria-hidden="true">
+    <div class="sky__layer sky__layer--golden"></div>
+    <div class="sky__layer sky__layer--night"></div>
+    <div class="sky__layer sky__layer--dawn"></div>
+    <div class="sky__sun"></div>
+    <canvas class="sky__stars" id="stars"></canvas>
+  </div>
+
+  <svg class="defs" aria-hidden="true" focusable="false">
+    <defs>
+      <g id="moonShape">
+        <circle class="moon__dark" cx="100" cy="100" r="80"></circle>
+        <path class="moon__lit" id="moonLit" d=""></path>
+      </g>
+    </defs>
+  </svg>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="top">
+    <button class="switch switch--motion" id="motionSwitch" type="button" role="switch" aria-checked="true">
+      <span class="switch__label" data-t="nav.motion"></span>
+      <span class="switch__track" aria-hidden="true">
+        <span class="switch__knob"></span>
+      </span>
+    </button>
+    <button class="switch" id="themeSwitch" type="button" role="switch" aria-checked="true">
+      <span class="switch__label switch__label--golden" data-t="nav.golden"></span>
+      <span class="switch__track" aria-hidden="true">
+        <span class="switch__knob"></span>
+      </span>
+      <span class="switch__label switch__label--night" data-t="nav.night"></span>
+    </button>
+  </header>
+
+  <main id="story">
+    <section class="pin pin--hero" aria-labelledby="heroName">
+      <div class="pin__stick hero" id="heroScene">
+        <svg class="hero__moon" viewBox="0 0 200 200" aria-hidden="true">
+          <use href="#moonShape"></use>
+        </svg>
+        <p class="hero__kicker hand" data-t="hero.kicker"></p>
+        <h1 class="hero__name" id="heroName" data-t="hero.name"></h1>
+        <p class="hero__line" data-t="hero.line"></p>
+        <p class="hero__scroll" data-t="hero.scroll"></p>
+      </div>
+    </section>
+
+    <section class="block reveal" aria-labelledby="momentTitle">
+      <h2 id="momentTitle" data-t="moment.title"></h2>
+      <p class="lead" data-t="moment.lead"></p>
+      <ul class="facts" data-facts="moment.facts"></ul>
+      <p class="hand hint" data-t="moment.hint"></p>
+    </section>
+
+    <section class="pin pin--moon" aria-labelledby="moonTitle">
+      <div class="pin__stick" id="moonScene">
+        <div class="moonwrap">
+<canvas class="bigmoon" id="moonGlobe" width="420" height="420" role="img"></canvas>
+        </div>
+        <p class="hand moon__when" id="moonWhen" aria-hidden="true"></p>
+        <p class="moon__drag" data-t="moon.drag"></p>
+        <h2 id="moonTitle" data-t="moon.title"></h2>
+      </div>
+    </section>
+    <div class="block block--after reveal">
+      <p class="lead" data-t="moon.lead"></p>
+      <ul class="facts" data-facts="moon.facts"></ul>
+      <figure class="quote">
+        <blockquote class="quote__ar" lang="ar" dir="rtl" data-t="moon.quote"></blockquote>
+        <figcaption class="hand" data-t="moon.quoteMeaning"></figcaption>
+      </figure>
+    </div>
+
+    <section class="pin pin--days" aria-labelledby="daysTitle">
+      <div class="pin__stick" id="daysScene">
+        <h2 id="daysTitle" data-t="days.title"></h2>
+        <p class="lead" data-t="days.lead"></p>
+        <p class="bignumber"><span id="daysAlive">0</span> <span class="bignumber__unit" data-t="days.unit"></span></p>
+        <p class="hand" data-t="days.and"></p>
+      </div>
+    </section>
+    <div class="block block--wide block--after reveal">
+      <ul class="facts facts--four">
+        <li class="fact"><span class="fact__big" id="hoursAlive">0</span><span class="fact__small" data-t="days.stats.hours"></span></li>
+        <li class="fact"><span class="fact__big" id="moonsAlive">0</span><span class="fact__small" data-t="days.stats.moons"></span></li>
+        <li class="fact"><span class="fact__big" id="tripsAlive">0</span><span class="fact__small" data-t="days.stats.trips"></span></li>
+        <li class="fact"><span class="fact__big" id="daysToNext">0</span><span class="fact__small" data-t="days.stats.next"></span></li>
+      </ul>
+    </div>
+
+    <section class="pin pin--scorpio" aria-labelledby="scorpioTitle">
+      <div class="pin__stick" id="scorpioScene">
+        <h2 id="scorpioTitle" data-t="scorpio.title"></h2>
+        <svg class="scorpio" id="scorpio" viewBox="0 0 600 520" role="img" aria-labelledby="scorpioAlt">
+          <title id="scorpioAlt" data-t="scorpio.alt"></title>
+        </svg>
+        <p class="hand scorpio__note" data-t="scorpio.note"></p>
+      </div>
+    </section>
+
+    <section class="block reveal" aria-labelledby="songsTitle">
+      <h2 id="songsTitle" data-t="songs.title"></h2>
+      <p class="lead" data-t="songs.lead"></p>
+      <ul class="songs" id="songs"></ul>
+    </section>
+
+    <section class="block block--wide reveal" aria-labelledby="gardenTitle">
+      <h2 id="gardenTitle" data-t="garden.title"></h2>
+      <p class="lead" data-t="garden.lead"></p>
+      <ul class="garden" id="garden"></ul>
+    </section>
+
+    <section class="block reveal" id="voice" aria-labelledby="voiceTitle" hidden>
+      <h2 id="voiceTitle" data-t="voice.title"></h2>
+      <p class="lead" data-t="voice.lead"></p>
+      <div class="voice" aria-hidden="true" id="voiceBars"></div>
+    </section>
+
+    <section class="pin pin--wall" aria-labelledby="galleryTitle">
+      <div class="pin__stick" id="wallScene">
+        <h2 id="galleryTitle" data-t="gallery.title"></h2>
+        <p class="lead" data-t="gallery.lead"></p>
+        <div class="ring-stage">
+          <ul class="ring" id="gallery"></ul>
+        </div>
+        <p class="hand" data-t="gallery.hint"></p>
+      </div>
+    </section>
+
+    <section class="block block--center reveal" aria-labelledby="portraitTitle">
+      <h2 id="portraitTitle" data-t="portrait.title"></h2>
+      <div class="portrait" id="portrait"></div>
+      <p class="hand" data-t="portrait.line"></p>
+    </section>
+
+    <section class="block block--letter reveal" aria-labelledby="letterTitle">
+      <h2 id="letterTitle" data-t="letter.title"></h2>
+      <div class="letter" id="letter"></div>
+      <p class="letter__sign hand" data-t="letter.sign"></p>
+      <svg class="signature" id="signature" viewBox="0 0 300 120" role="img" aria-labelledby="signatureAlt">
+        <title id="signatureAlt" data-t="letter.signatureAlt"></title>
+      </svg>
+      <p class="signature__note" data-t="letter.signatureNote"></p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p class="hand" data-t="footer.line"></p>
+    <p class="foot__small" data-t="footer.facts"></p>
+  </footer>
+
+  <dialog class="memory" id="memory" aria-labelledby="memoryTitle">
+    <div class="memory__flower" id="memoryFlower" aria-hidden="true"></div>
+    <h3 id="memoryTitle"></h3>
+    <p class="hand" id="memoryYear"></p>
+    <p id="memoryText"></p>
+    <div class="memory__prayer" id="memoryPrayer" hidden>
+      <p class="memory__name" id="memoryName"></p>
+      <p class="memory__dua" id="memoryDua" lang="ar" dir="rtl"></p>
+      <p class="memory__meaning" id="memoryDuaMeaning"></p>
+    </div>
+    <p class="memory__close"><button class="btn" id="memoryClose" type="button" data-t="garden.close"></button></p>
+  </dialog>
+
+  <dialog class="viewer" id="viewer">
+    <img id="viewerImage" src="" alt="">
+    <p class="viewer__close"><button class="btn" id="viewerClose" type="button" data-t="gallery.close"></button></p>
+  </dialog>
+
+  <noscript><p class="noscript">This page needs JavaScript to show its sky.</p></noscript>
+</body>
+</html>
