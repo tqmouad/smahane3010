@@ -98,3 +98,21 @@ Not received yet: `new-website-playbook.md` and `security-checklist.md` (owner m
 1. Optional extras: songs to add, flower memories, audios.
 2. Owner did not choose a signature idea or confirm the ink flowers; both were chosen for him and can be changed (`--petal-fill` in `tokens.css` brings colour back).
 3. Please send `new-website-playbook.md` and `security-checklist.md` if they exist.
+
+## v11 — 12 Nov 2026: chess, chart, same-sky stars (branch build/v10-chess-chart-stars)
+
+New sections, in page order:
+- **Your sky in a circle**: her birth chart as a round SVG drawing (js/chart.js, numbers in js/skydata.js),
+  with element/modality counts, a plain table of positions, and a "just for fun" note. Numbers calculated
+  with PyEphem (scripts kept in docs/tools/, results in docs/BIRTH_SKY.md).
+- **Other stars in your sky**: 8 famous people ranked by how close the planets on their birthday stood
+  to hers. Dates verified (docs/LICENSES.md); formula written on the page and in docs/BIRTH_SKY.md.
+- **Our game of chess**: a 3D chessboard on a canvas (js/chess.js, no library). Her queen (her face,
+  from portrait.jpg) and his king (his face, cameo-his.jpg) move once per story moment while scrolling;
+  ends "Checkmate. We both win." She can turn the board with a finger; it springs back.
+Also: html now has overflow-x: clip (iPad showed a 55px sideways scroll from the door-reveal cards).
+Cache tags bumped to ?v=11.
+
+Checked (Chrome via Playwright, 390/820/1440 widths): no console errors, no sideways scroll,
+calm mode writes the moves out as a story, night + golden themes, wheel and chess at all sizes.
+NOT checked: real iPhone/laptop, Safari, Firefox, screen readers, the live Cloudflare site.

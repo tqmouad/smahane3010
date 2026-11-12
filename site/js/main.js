@@ -1,7 +1,10 @@
-import T from "./text.en.js?v=10";
-import FULL_MOONS from "./fullmoons.js?v=10";
-import { startSky } from "./sky.js?v=10";
-import { createGlobe } from "./moon.js?v=10";
+import T from "./text.en.js?v=11";
+import FULL_MOONS from "./fullmoons.js?v=11";
+import { startSky } from "./sky.js?v=11";
+import { createGlobe } from "./moon.js?v=11";
+import { CHART } from "./skydata.js?v=11";
+import { drawChart, counts, signOf, degreeIn, houseOf } from "./chart.js?v=11";
+import { createChess, MOVES, notation, activeMove } from "./chess.js?v=11";
 
 // ---------- facts about her day (see docs/BIRTH_SKY.md) ----------
 const BIRTH = Date.UTC(2002, 9, 30, 17, 0, 0); // 5:00 pm in Morocco, which was on UTC that day
@@ -55,6 +58,7 @@ themeSwitch.addEventListener("click", () => {
   root.dataset.theme = root.dataset.theme === "night" ? "golden" : "night";
   try { localStorage.setItem("sky", root.dataset.theme); } catch (e) { /* storage can be blocked */ }
   showTheme();
+  chess.render(chessAt, chessHand.yaw);
 });
 showTheme();
 
@@ -193,6 +197,93 @@ function drawScorpio(target) {
   };
 }
 const showScorpio = drawScorpio($("scorpio"));
+
+// ---------- her birth chart ----------
+const showChart = drawChart($("chartWheel"), CHART, T);
+{
+  const sky = counts(CHART);
+  const sunSign = signOf(CHART.bodies[0].lon);
+  const addCards = (listId, items, values) => {
+    const top = Math.max(...values);
+    items.forEach((item, i) => {
+      const li = el("li", "fact" + (values[i] === top ? " fact--top" : ""));
+      const bar = el("span", "fact__bar");
+      bar.style.setProperty("--share", values[i] / sky.total);
+      li.append(el("span", "fact__big", String(values[i])), el("span", "fact__small", item.name + ": " + item.note), bar);
+      li.setAttribute("aria-label", item.name + " " + fill(T.chart.countOf, { n: values[i], total: sky.total }));
+      $(listId).append(li);
+    });
+    return items[values.indexOf(top)];
+  };
+  const topElement = addCards("chartElements", T.chart.elements, sky.element);
+  addCards("chartModes", T.chart.modes, sky.mode);
+  $("chartMost").textContent =
+    fill(T.chart.most, topElement) + " " + fill(T.chart.sun, { sign: T.chart.signs[sunSign], element: T.chart.elements[sunSign % 4].name });
+
+  const row = (name, lon, retro, house) => {
+    const tr = el("tr");
+    const sign = el("td", null, T.chart.signs[signOf(lon)] + " " + fill(T.chart.degrees, { n: Math.floor(degreeIn(lon)) }));
+    if (retro) sign.append(" ", el("em", null, "(" + T.chart.backwards + ")"));
+    tr.append(el("th", null, name), sign, el("td", null, String(house)));
+    tr.firstChild.scope = "row";
+    $("chartRows").append(tr);
+  };
+  CHART.bodies.forEach((b) => row(T.chart.planets[b.name].name, b.lon, b.retro, houseOf(b.lon, CHART.asc)));
+  row(T.chart.rising, CHART.asc, false, 1);
+  row(T.chart.top, CHART.mc, false, houseOf(CHART.mc, CHART.asc));
+}
+
+// ---------- the sky she shares with other stars ----------
+T.twins.list.forEach((person) => {
+  const li = el("li", "twin");
+  const words = el("div");
+  words.append(el("span", "twin__name", person.name), el("span", "twin__job", person.job + " · " + fill(T.twins.born, { date: person.born })));
+  if (person.apart <= 10) words.append(el("span", "twin__close", fill(T.twins.closest, { planet: person.planet, n: person.apart })));
+  const score = el("div");
+  const bar = el("span", "twin__bar");
+  bar.style.setProperty("--share", person.score / 100);
+  score.append(el("span", "twin__score", person.score + "%"), bar);
+  li.append(words, score);
+  $("twins").append(li);
+});
+
+// ---------- the chessboard: her queen and his king ----------
+const chessCanvas = $("chessBoard");
+const boardColours = () => {
+  const s = getComputedStyle(root), v = (name) => s.getPropertyValue(name).trim();
+  return { light: v("--board-light"), dark: v("--board-dark"), edge: v("--board-edge"), glow: v("--board-glow"), her: v("--piece-her"), his: v("--piece-his"), ink: v("--piece-ink"), paper: v("--paper") };
+};
+const chess = createChess(chessCanvas, boardColours, { queen: "img/cameo-her.jpg", king: "img/cameo-his.jpg" });
+const chessHand = { yaw: 0 }; // extra turn added by her finger
+let chessAt = 0;
+const captionNodes = [T.chess.start, ...T.chess.moves].map((item, i) => {
+  const li = el("li", "chess__move");
+  const tag = i === 0 ? item.label : fill(T.chess.moveLabel, { n: i, move: notation(MOVES[i - 1], i - 1) }) + " · " + item.year;
+  li.append(el("span", "chess__tag", tag), el("span", "chess__title", item.title), el("span", "chess__text", item.text));
+  if (item.note) li.append(el("span", "chess__note", item.note));
+  $("chessMoves").append(li);
+  return li;
+});
+function showChess(p) {
+  chessAt = p;
+  const now = activeMove(p) + 1; // 0 is the quiet start
+  captionNodes.forEach((li, i) => li.classList.toggle("is-active", i === now));
+  chess.render(p, chessHand.yaw);
+}
+{ // slide a finger (or the mouse) sideways across the board to turn it; it swings back when she lets go
+  let from = null;
+  chessCanvas.addEventListener("pointerdown", (e) => { from = e.clientX - chessHand.yaw * 140; chessCanvas.setPointerCapture(e.pointerId); if (window.gsap) window.gsap.killTweensOf(chessHand); });
+  chessCanvas.addEventListener("pointermove", (e) => { if (from === null) return; chessHand.yaw = (e.clientX - from) / 140; chess.render(chessAt, chessHand.yaw); });
+  const release = () => {
+    if (from === null) return;
+    from = null;
+    if (window.gsap && !reduceMotion) window.gsap.to(chessHand, { yaw: 0, duration: 2, ease: "elastic.out(1, 0.6)", onUpdate: () => chess.render(chessAt, chessHand.yaw) });
+    else { chessHand.yaw = 0; chess.render(chessAt, 0); }
+  };
+  chessCanvas.addEventListener("pointerup", release);
+  chessCanvas.addEventListener("pointercancel", release);
+}
+chess.render(1, 0);
 
 // ---------- songs ----------
 T.songs.list.forEach((song) => {
@@ -398,6 +489,7 @@ pinScene("heroScene");
 pinScene("moonScene", showMoon);
 pinScene("daysScene", showDays);
 pinScene("scorpioScene", showScorpio);
+pinScene("chessScene", showChess);
 pinScene("wallScene");
 
 document.querySelectorAll(".reveal").forEach((block) => {
@@ -415,7 +507,8 @@ document.querySelectorAll(".reveal .lead").forEach((lead) => { // split into wor
   lead.style.setProperty("--n", words.length);
   follow(lead, "read", setVar(lead, "--lp"));
 });
-document.querySelectorAll(".song, .portrait, .letter").forEach((node) => follow(node, "in", setVar(node, "--p")));
+document.querySelectorAll(".song, .twin, .portrait, .letter").forEach((node) => follow(node, "in", setVar(node, "--p")));
+follow($("chartWheel"), "in", showChart);
 follow($("signature"), "sign", (p) => { signatureLine.style.strokeDashoffset = 1 - p; $("signature").style.setProperty("--p", p); });
 flowers.forEach((flower) => {
   const stem = flower.querySelector(".flower__stem");
