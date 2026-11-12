@@ -1,4 +1,4 @@
-// The star field behind the page. The stars have real depth: scrolling flies you forward through them.
+// The star field behind the page: calm stars that stay in place and twinkle, with a shooting star now and then.
 
 function seeded(seed) {
   let a = seed >>> 0;
@@ -17,9 +17,7 @@ export function startSky(canvas, reduceMotion) {
   const css = getComputedStyle(root);
   const colours = ["--star", "--star", "--star-warm", "--star-cool"].map((name) => css.getPropertyValue(name).trim() || "#fff");
 
-  const TRAVEL = 0.00022; // how far one pixel of scrolling moves you through the stars
   let w = 0, h = 0, stars = [], shooting = null, nextShot = 4000, running = false;
-  let camera = (window.scrollY || 0) * TRAVEL, speed = 0;
 
   function build() {
     const ratio = Math.min(window.devicePixelRatio || 1, 2);
@@ -41,35 +39,17 @@ export function startSky(canvas, reduceMotion) {
 
   function draw(time) {
     ctx.clearRect(0, 0, w, h);
-    const target = (window.scrollY || 0) * TRAVEL;
-    const before = camera;
-    camera = reduceMotion ? target : camera + (target - camera) * 0.12; // glide towards where the scroll is
-    speed = camera - before;
-    const cx = w / 2, cy = h * 0.46, reach = Math.max(w, h) * 0.62;
-    ctx.lineCap = "round";
-    for (const s of stars) {
-      let z = (s.z - camera) % 1;
-      if (z < 0) z += 1;
-      const depth = 0.07 + z * 0.93; // 0.07 = right in front of you, 1 = far away
-      const px = cx + (s.x / depth) * reach * 0.55, py = cy + (s.y / depth) * reach * 0.55;
-      if (px < -20 || px > w + 20 || py < -20 || py > h + 20) continue;
-      const twinkle = reduceMotion ? 0.85 : 0.6 + 0.4 * Math.sin(s.phase + (time / 1000) * s.speed);
-      const near = 1 - z;
-      const fade = Math.min(1, z * 9) * Math.min(1, (1 - z) * 6 + 0.25); // no popping in or out
-      const r = s.size * (0.45 + near * near * 1.9);
-      ctx.globalAlpha = twinkle * fade * (0.35 + near * 0.65);
+    for (const s of stars) { // normal stars: they stay in place and only twinkle
+      const twinkle = reduceMotion ? 0.85 : 0.55 + 0.45 * Math.sin(s.phase + (time / 1000) * s.speed);
+      const px = (s.x * 0.5 + 0.5) * w, py = (s.y * 0.5 + 0.5) * h;
+      const r = s.size * (0.6 + s.z * 0.5);
+      ctx.globalAlpha = twinkle * (0.4 + s.z * 0.6);
       ctx.fillStyle = s.colour;
-      const stretch = Math.abs(speed) > 0.0006 ? Math.min(0.5, Math.abs(speed) * 55) * near : 0;
-      if (stretch > 0.01) { // moving fast: each star leaves a short trail pointing away from the centre
-        ctx.strokeStyle = s.colour; ctx.lineWidth = r * 1.3;
-        ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px - (px - cx) * stretch, py - (py - cy) * stretch); ctx.stroke();
-      } else {
-        ctx.beginPath(); ctx.arc(px, py, r, 0, 6.2832); ctx.fill();
-        if (r > 2) { // the nearest stars get a small sparkle
-          ctx.globalAlpha *= 0.5;
-          ctx.fillRect(px - r * 3.2, py - 0.3, r * 6.4, 0.6);
-          ctx.fillRect(px - 0.3, py - r * 3.2, 0.6, r * 6.4);
-        }
+      ctx.beginPath(); ctx.arc(px, py, r, 0, 6.2832); ctx.fill();
+      if (r > 1.9) { // the brightest stars get a small sparkle
+        ctx.globalAlpha *= 0.5;
+        ctx.fillRect(px - r * 3.2, py - 0.3, r * 6.4, 0.6);
+        ctx.fillRect(px - 0.3, py - r * 3.2, 0.6, r * 6.4);
       }
     }
     if (shooting) {
@@ -109,5 +89,4 @@ export function startSky(canvas, reduceMotion) {
   window.addEventListener("resize", () => { build(); draw(performance.now()); });
   document.addEventListener("visibilitychange", update);
   new MutationObserver(update).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
-  if (reduceMotion) window.addEventListener("scroll", () => draw(0), { passive: true });
 }
