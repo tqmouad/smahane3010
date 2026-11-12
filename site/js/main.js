@@ -9,6 +9,7 @@ const BIRTH_MONTH = 9; // October (months start at 0)
 const BIRTH_DAY = 30;
 const MOON_LIT = 0.34; // part of the moon that was lit
 const MOON_WANING = true;
+const HIS_MOON_LIT = 0.998; // the moon on 13 July 2003, the day the maker of this sky was born: full
 
 const SVG = "http://www.w3.org/2000/svg";
 const root = document.documentElement;
@@ -58,8 +59,7 @@ showTheme();
 startSky($("stars"), reduceMotion);
 
 // ---------- her moon ----------
-function moonPath(lit, waning) {
-  const cx = 100, cy = 100, r = 80;
+function moonPath(lit, waning, cx = 100, cy = 100, r = 80) {
   const rx = (r * Math.abs(1 - 2 * lit)).toFixed(1);
   const limb = waning ? 0 : 1; // waning: the left side is lit (seen from the north)
   const inner = lit < 0.5 ? 1 - limb : limb;
@@ -211,6 +211,20 @@ function makeFlower(n) {
   s.append(head);
   return s;
 }
+// A quiet ink drawing for her father's year: a simple grave, one flower beside it, one star above.
+function makeGrave(label) {
+  const s = svg("svg", { viewBox: "0 0 100 140", role: "img", "aria-label": label, class: "grave" });
+  s.append(svg("path", { d: "M8,122 C30,118 70,119 94,123", class: "grave__ink" }));
+  s.append(svg("path", { d: "M32,121 L32,84 C32,62 68,62 68,84 L68,121", class: "grave__ink" }));
+  s.append(svg("path", { d: "M34,120 L34,85 C35,66 66,65 66,85", class: "grave__ink grave__ink--soft" }));
+  s.append(svg("path", { d: "M14,121 l2,-7 M19,121 l-1,-6 M88,122 l-2,-7 M24,121 l2,-5", class: "grave__ink" }));
+  s.append(svg("path", { d: "M80,121 C79,110 82,104 80,97", class: "grave__ink" }));
+  for (let i = 0; i < 6; i++) s.append(svg("ellipse", { cx: 80, cy: 91, rx: 2.6, ry: 6, transform: `rotate(${i * 60} 80 97)`, class: "grave__ink" }));
+  s.append(svg("circle", { cx: 80, cy: 97, r: 2, class: "grave__heart" }));
+  s.append(svg("path", { d: "M50,20 L52.5,29 L61,31 L52.5,33.5 L50,42 L47.5,33.5 L39,31 L47.5,29 Z", class: "grave__star" }));
+  return s;
+}
+
 const memory = $("memory");
 const flowers = [];
 const totalFlowers = lifeNumbers(Date.now()).tripsAlive;
@@ -221,12 +235,24 @@ for (let n = 1; n <= totalFlowers; n++) {
   button.type = "button";
   button.style.setProperty("--i", n);
   button.setAttribute("aria-label", fill(T.garden.flowerAria, { n, total: totalFlowers, year }));
+  if (typeof T.garden.memories[n - 1] === "object") button.classList.add("flower--star");
   button.append(makeFlower(n), el("span", "flower__year", String(year)));
   button.addEventListener("click", () => {
-    $("memoryFlower").replaceChildren(makeFlower(n));
+    const saved = T.garden.memories[n - 1];
+    const memoryOf = typeof saved === "object" ? saved : { text: saved };
+    $("memoryFlower").replaceChildren(memoryOf.dua ? makeGrave(memoryOf.drawing) : makeFlower(n));
+    $("memoryPrayer").hidden = !memoryOf.dua;
+    if (memoryOf.dua) {
+      $("memoryName").replaceChildren(memoryOf.name + " \u00b7 ");
+      const mercy = el("span", null, memoryOf.mercy);
+      mercy.lang = "ar"; mercy.dir = "rtl";
+      $("memoryName").append(mercy);
+      $("memoryDua").textContent = memoryOf.dua;
+      $("memoryDuaMeaning").textContent = memoryOf.duaMeaning;
+    }
     $("memoryTitle").textContent = fill(T.garden.year, { n });
     $("memoryYear").textContent = String(year);
-    $("memoryText").textContent = T.garden.memories[n - 1] || fill(T.garden.wishes[n % T.garden.wishes.length], { year });
+    $("memoryText").textContent = memoryOf.text || fill(T.garden.wishes[n % T.garden.wishes.length], { year });
     memory.showModal();
   });
   li.append(button);
@@ -304,6 +330,12 @@ function drawSignature(target) {
   }
   const path = svg("path", { d, class: "signature__line", pathLength: 1 });
   target.append(path);
+  const moons = svg("g", { class: "signature__moons" });
+  [[62, MOON_LIT], [238, HIS_MOON_LIT]].forEach(([x, lit]) => { // her crescent on the left, his full moon on the right
+    moons.append(svg("circle", { cx: x, cy: 62, r: 15, class: "signature__disc" }));
+    moons.append(svg("path", { d: moonPath(lit, true, x, 62, 15), class: "moon__lit" }));
+  });
+  target.append(moons);
   return path;
 }
 const signatureLine = drawSignature($("signature"));
@@ -338,7 +370,7 @@ document.querySelectorAll(".reveal .lead").forEach((lead) => { // split into wor
   lead.style.setProperty("--n", words.length);
   track(lead, "read", setVar(lead, "--lp"));
 });
-track($("signature"), "sign", (p) => { signatureLine.style.strokeDashoffset = 1 - p; });
+track($("signature"), "sign", (p) => { signatureLine.style.strokeDashoffset = 1 - p; $("signature").style.setProperty("--p", p); });
 document.querySelectorAll(".song").forEach((song) => track(song, "in", setVar(song, "--p")));
 flowers.forEach((flower) => {
   const stem = flower.querySelector(".flower__stem");

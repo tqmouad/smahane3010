@@ -449,3 +449,23 @@ h2 {
 .portrait .frame { transform: rotate(-1.5deg); }
 .portrait .frame:hover, .portrait .frame:focus-visible { transform: rotate(0deg) scale(1.03); box-shadow: 0 0 2.5rem var(--glow); }
 .signature__line { stroke-width: 0.7; }
+
+/* ---------- her father's year, and the two-moon signature ---------- */
+
+.flower--star .flower__year::after { content: " \2726"; color: var(--accent); }
+.grave { width: 7rem; height: auto; overflow: visible; }
+.grave__ink { fill: none; stroke: var(--ink); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.grave__ink--soft { opacity: 0.45; }
+.grave__heart { fill: var(--accent); }
+.grave__star { fill: var(--accent); filter: drop-shadow(0 0 4px var(--glow)); }
+.memory { max-height: calc(100% - 2rem); overflow-y: auto; }
+.memory__prayer { margin-top: var(--space-3); padding-top: var(--space-3); border-top: 1px solid var(--line); }
+.memory__name { font-size: 1.15rem; }
+.memory__dua { font-size: 1.45rem; line-height: 1.9; color: var(--accent); }
+.memory__meaning { font-size: var(--size-small); font-style: italic; color: var(--ink-soft); }
+
+.signature { width: min(85%, 17rem); }
+.signature__disc { fill: var(--moon-back); stroke: var(--line); stroke-width: 0.6; }
+.signature__moons { opacity: clamp(0, calc(var(--p, 1) * 3 - 2), 1); }
+.signature__moons .moon__lit { filter: drop-shadow(0 0 3px var(--glow)); }
+.signature__note { margin-top: var(--space-1); text-align: right; font-size: var(--size-small); font-style: italic; color: var(--ink-soft); }

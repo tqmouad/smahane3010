@@ -110,6 +110,7 @@
   --stem: #7fcf9b;
   --moon-lit: #fdf6dc;
   --moon-dark: rgba(255, 255, 255, 0.07);
+  --moon-back: #1a2050;
   --focus: #ffe9a8;
   --stars-opacity: 1;
   --sun-opacity: 0;
@@ -131,6 +132,7 @@
   --stem: #2f7a4d;
   --moon-lit: #fffaf0;
   --moon-dark: rgba(29, 22, 66, 0.1);
+  --moon-back: #d9c3c2;
   --focus: #1d1642;
   --stars-opacity: 0;
   --sun-opacity: 1;

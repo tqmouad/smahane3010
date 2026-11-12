@@ -90,8 +90,40 @@ export default {
     flowerAria: "Flower {n} of {total}: the year {year}. Open its memory.",
     year: "Year {n}",
     close: "Close",
-    // One memory per year, first to last. Empty ones show the line below.
-    memories: [],
+    // One memory per year, first to last. Year 16 is special: it also carries a prayer.
+    memories: [
+      "Life gave me the mother of my children. Your father named you Smahane, after the singer he loved. And in July, a boy was born who would one day look for you.",
+      "You were very small, and two people loved you very much: your mother Zined and your father Bouzekri.",
+      "Still little, still loved. Your home in Krazza was your whole world.",
+      "You found Spacetoon. Remi, Al Qannas, Ahd Al Asdiqaa... you loved them all.",
+      "More cartoons, more songs. I think you still know every word.",
+      "Your first day of school. Your father took you to the souk and bought you your backpack.",
+      "Bicycle days. You and your friends, riding until the sun went down.",
+      "You planted things in the small garden at home. This garden is for that little girl.",
+      "First in your class, because you are so smart. After school you ran home, hugged your father, and heard him listening to Smahane on the radio. Then dinner, then sleep.",
+      "You found out that you can draw. Your aunt inspired you. You joined a competition, and you won.",
+      "You kept drawing. The pencil was already your friend.",
+      "A quiet year. You were growing, and so was your art.",
+      "The last year at home before a big change.",
+      "A new town: Souk Sebt. High school, the school dorm, new friends. Good days and hard days, and you got through them all.",
+      "Souk Sebt again. Far from home, but stronger every month.",
+      {
+        text: "The hardest year. Your father left this world. He is not gone from you. He is in your name, in your eyes, and in every song by Smahane.",
+        name: "Bouzekri Chaib",
+        mercy: "رحمه الله",
+        dua: "اللهم اغفر له وارحمه، واجعل قبره روضةً من رياض الجنة",
+        duaMeaning: "O Allah, forgive him and have mercy on him, and make his grave a garden from the gardens of Paradise.",
+        drawing: "A small, simple grave drawn in ink, with one flower beside it and one star above it.",
+      },
+      "You kept going. That is the bravest thing I know about you.",
+      "A new city again: Beni Mellal, and university in Mghila. You met Bis Bis and Hiba, and moved into the dorms.",
+      "University days. New friends, new streets, the same strong girl.",
+      "Our last year at university. I met you. I remember your wonderful eyes. It is one of my best memories.",
+      "We got engaged. We went up to the mountains together, and we had the best time.",
+      "Casablanca. A hard year for you, working at Marjane, but you made new friends. It was the best time for us. Then you started your own small business: custom phone cases.",
+      "Tangier. A stressful assessment, and I was there with you. You passed. Cabin crew for Emirates. One of the best days of my life.",
+      "This year, I made you a sky.",
+    ],
     // Shown when a year has no memory of its own yet.
     wishes: [
       "The sky was lucky to have you in {year}.",
@@ -140,7 +172,8 @@ export default {
       "Stay close. The universe is more fun with you in it.",
     ],
     sign: "Yours, under every sky,",
-    signatureAlt: "A signature with no name: two small knots of ink, tied together by one long line.",
+    signatureAlt: "A signature with no name: two moons tied together by one long ink line. On the left, a thin crescent. On the right, a full moon.",
+    signatureNote: "Your moon and mine. I was born under a full one. One line ties them.",
   },
 
   footer: {

@@ -51,3 +51,7 @@ The site will count days live, so this number is only a check.
 Second source for the moon only: theskylive.com lists 30 Oct 2002 as Waning Crescent, 35.2% lit (their value is for a different hour, so a small difference is expected).
 
 Not cross-checked with a second source: sunrise and sunset times, planets, Antares position, full-moon count.
+
+## The maker's moon (added 2026-11-12)
+
+The owner was born on Sunday 13 July 2003. PyEphem gives the moon as 99.0% to 99.8% lit that day, with the exact full moon at 19:21 UTC. His birth hour is not known, so the site shows a full moon. Not cross-checked with a second source.
