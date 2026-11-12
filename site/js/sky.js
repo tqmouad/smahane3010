@@ -10,6 +10,9 @@ function seeded(seed) {
   };
 }
 
+// How fast the sky turns. Bigger = faster. 0.000024 moves a star in the middle of the screen about 20 pixels a second.
+const TURN_SPEED = 0.000024;
+
 export function startSky(canvas, reduceMotion) {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
@@ -42,7 +45,7 @@ export function startSky(canvas, reduceMotion) {
     ctx.clearRect(0, 0, w, h);
     // The whole sky turns very slowly around a point above the screen, like the real night sky.
     // Stars also sit at three depths, so nearer ones slide a little more when the page scrolls.
-    const turn = reduceMotion ? 0 : time * 0.0000085;
+    const turn = reduceMotion ? 0 : time * TURN_SPEED;
     const scroll = reduceMotion ? 0 : (window.scrollY || 0);
     const pivotX = w * 0.5, pivotY = -h * 0.25;
     for (const s of stars) {
