@@ -8,12 +8,12 @@
   <title>Smahane, in bloom since 30/10/2002</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/tokens.css?v=7">
-  <link rel="stylesheet" href="css/site.css?v=7">
-  <script src="js/theme.js?v=7"></script>
-  <script src="vendor/gsap.min.js?v=7" defer></script>
-  <script src="vendor/ScrollTrigger.min.js?v=7" defer></script>
-  <script type="module" src="js/main.js?v=7"></script>
+  <link rel="stylesheet" href="css/tokens.css?v=8">
+  <link rel="stylesheet" href="css/site.css?v=8">
+  <script src="js/theme.js?v=8"></script>
+  <script src="vendor/gsap.min.js?v=8" defer></script>
+  <script src="vendor/ScrollTrigger.min.js?v=8" defer></script>
+  <script type="module" src="js/main.js?v=8"></script>
 </head>
 <body>
   <a class="skip" href="#story" data-t="nav.skip"></a>
@@ -38,6 +38,12 @@
   <div class="progress" aria-hidden="true"></div>
 
   <header class="top">
+    <button class="switch switch--motion" id="motionSwitch" type="button" role="switch" aria-checked="true">
+      <span class="switch__label" data-t="nav.motion"></span>
+      <span class="switch__track" aria-hidden="true">
+        <span class="switch__knob"></span>
+      </span>
+    </button>
     <button class="switch" id="themeSwitch" type="button" role="switch" aria-checked="true">
       <span class="switch__label switch__label--golden" data-t="nav.golden"></span>
       <span class="switch__track" aria-hidden="true">

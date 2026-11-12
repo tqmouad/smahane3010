@@ -13,7 +13,7 @@ function seeded(seed) {
 // How fast the sky turns. Bigger = faster. 0.000024 moves a star in the middle of the screen about 20 pixels a second.
 const TURN_SPEED = 0.000024;
 
-export function startSky(canvas, reduceMotion) {
+export function startSky(canvas, calm) { // calm = slower turn, no shooting stars, no sliding on scroll
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
   const root = document.documentElement;
@@ -45,8 +45,8 @@ export function startSky(canvas, reduceMotion) {
     ctx.clearRect(0, 0, w, h);
     // The whole sky turns very slowly around a point above the screen, like the real night sky.
     // Stars also sit at three depths, so nearer ones slide a little more when the page scrolls.
-    const turn = reduceMotion ? 0 : time * TURN_SPEED;
-    const scroll = reduceMotion ? 0 : (window.scrollY || 0);
+    const turn = time * TURN_SPEED * (calm ? 0.4 : 1);
+    const scroll = calm ? 0 : (window.scrollY || 0);
     const pivotX = w * 0.5, pivotY = -h * 0.25;
     for (const s of stars) {
       const angle = s.x * 3.14159 + turn;
@@ -54,7 +54,7 @@ export function startSky(canvas, reduceMotion) {
       const px = pivotX + Math.cos(angle) * reach;
       const py = pivotY + Math.sin(angle) * reach - scroll * (0.01 + s.z * 0.035);
       if (px < -8 || px > w + 8 || py < -8 || py > h + 8) continue;
-      const twinkle = reduceMotion ? 0.85 : 0.55 + 0.45 * Math.sin(s.phase + (time / 1000) * s.speed);
+      const twinkle = calm ? 0.75 + 0.25 * Math.sin(s.phase + (time / 1000) * s.speed * 0.5) : 0.55 + 0.45 * Math.sin(s.phase + (time / 1000) * s.speed);
       const r = s.size * (0.6 + s.z * 0.5);
       ctx.globalAlpha = twinkle * (0.4 + s.z * 0.6);
       ctx.fillStyle = s.colour;
@@ -83,7 +83,7 @@ export function startSky(canvas, reduceMotion) {
 
   function loop(time) {
     if (!running) return;
-    if (!shooting && time > nextShot) {
+    if (!calm && !shooting && time > nextShot) {
       shooting = { start: time, length: 1100, x: w * (0.15 + Math.random() * 0.6), y: h * Math.random() * 0.35, dx: w * 0.35, dy: h * 0.22 };
       nextShot = time + 6000 + Math.random() * 9000;
     }
@@ -92,7 +92,7 @@ export function startSky(canvas, reduceMotion) {
   }
 
   function update() {
-    const shouldRun = !reduceMotion && root.dataset.theme === "night" && !document.hidden;
+    const shouldRun = root.dataset.theme === "night" && !document.hidden;
     if (shouldRun && !running) { running = true; requestAnimationFrame(loop); }
     if (!shouldRun) { running = false; draw(0); }
   }

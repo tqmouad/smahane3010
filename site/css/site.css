@@ -306,11 +306,6 @@ h2 {
 @keyframes bloom { to { transform: scale(1) rotate(0deg); } }
 @keyframes wave { 50% { transform: scaleY(var(--h, 0.6)); } }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-  .voice span { transform: scaleY(var(--h, 0.6)); }
-}
 
 /* ---------- scroll scenes (numbers --p, --in, --out are set by js/main.js while scrolling) ---------- */
 
@@ -403,10 +398,6 @@ h2 {
 .flower__leaf { opacity: clamp(0, calc(var(--p, 1) * 3 - 1), 1); }
 .flower__head { transform: scale(clamp(0, calc(var(--p, 1) * 2 - 0.75), 1)) rotate(calc((1 - var(--p, 1)) * -70deg)); }
 
-@media (prefers-reduced-motion: reduce) {
-  .pin { height: auto; }
-  .pin__stick { position: static; height: auto; padding-block: var(--space-section); }
-}
 
 /* ---------- ink flowers, her wall, the letter's signature ---------- */
 
@@ -541,8 +532,29 @@ canvas.bigmoon { touch-action: pan-y; cursor: grab; }
 .reveal .fact:nth-child(3) { --k: 1.8; }
 .reveal .fact:nth-child(4) { --k: 2.7; }
 
-@media (prefers-reduced-motion: reduce) {
-  .ring-stage { height: auto; perspective: none; }
-  .ring { width: 100%; height: auto; transform: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
-  .ring__item { position: static; transform: none; }
+
+/* ---------- calm mode (set by js/theme.js; the Motion switch at the top changes it) ---------- */
+/* Stars still drift slowly and words still fade in as you scroll, but nothing flies, spins or holds the screen. */
+
+.switch--motion { margin-right: var(--space-1); }
+.switch--motion .switch__label { opacity: 1; }
+.switch--motion .switch__track { background: var(--card); }
+.switch--motion .switch__knob, :root[data-theme="night"] .switch--motion .switch__knob { background: var(--ink-soft); box-shadow: none; transform: none; }
+:root[data-motion="full"] .switch--motion .switch__knob { background: var(--accent); box-shadow: 0 0 0.6rem var(--glow); transform: translateX(1.5rem); }
+.top { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-1); }
+
+:root[data-motion="calm"] { scroll-behavior: auto; }
+:root[data-motion="calm"] *, :root[data-motion="calm"] *::before, :root[data-motion="calm"] *::after {
+  animation-duration: 0.01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important;
 }
+:root[data-motion="calm"] .voice span { transform: scaleY(var(--h, 0.6)); }
+:root[data-motion="calm"] .pin { height: auto; }
+:root[data-motion="calm"] .pin__stick { position: static; height: auto; padding-block: var(--space-section); }
+:root[data-motion="calm"] .reveal > *, :root[data-motion="calm"] .reveal .fact, :root[data-motion="calm"] .song,
+:root[data-motion="calm"] .flower svg, :root[data-motion="calm"] .flower__head, :root[data-motion="calm"] .reveal > .letter,
+:root[data-motion="calm"] .portrait .frame, :root[data-motion="calm"] .hero__name, :root[data-motion="calm"] .hero__moon,
+:root[data-motion="calm"] canvas.bigmoon, :root[data-motion="calm"] .pin--moon .moonwrap, :root[data-motion="calm"] .pin--days .bignumber { transform: none; }
+:root[data-motion="calm"] .hero__name { filter: none; }
+:root[data-motion="calm"] .ring-stage { height: auto; perspective: none; }
+:root[data-motion="calm"] .ring { width: 100%; height: auto; transform: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+:root[data-motion="calm"] .ring__item { position: static; transform: none; }

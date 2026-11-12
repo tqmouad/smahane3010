@@ -7,6 +7,8 @@ export default {
   nav: {
     skip: "Skip to the story",
     switchLabel: "Night sky",
+    motion: "Motion",
+    motionLabel: "Full motion",
     golden: "5:00 pm",
     night: "Night",
   },

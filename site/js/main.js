@@ -1,7 +1,7 @@
-import T from "./text.en.js?v=7";
-import FULL_MOONS from "./fullmoons.js?v=7";
-import { startSky } from "./sky.js?v=7";
-import { createGlobe } from "./moon.js?v=7";
+import T from "./text.en.js?v=8";
+import FULL_MOONS from "./fullmoons.js?v=8";
+import { startSky } from "./sky.js?v=8";
+import { createGlobe } from "./moon.js?v=8";
 
 // ---------- facts about her day (see docs/BIRTH_SKY.md) ----------
 const BIRTH = Date.UTC(2002, 9, 30, 17, 0, 0); // 5:00 pm in Morocco, which was on UTC that day
@@ -14,7 +14,7 @@ const HIS_MOON_LIT = 0.998; // the moon on 13 July 2003, the day the maker of th
 
 const SVG = "http://www.w3.org/2000/svg";
 const root = document.documentElement;
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const reduceMotion = root.dataset.motion === "calm"; // calm mode: gentle fades only (see js/theme.js)
 const nf = new Intl.NumberFormat("en-US");
 
 const $ = (id) => document.getElementById(id);
@@ -57,6 +57,15 @@ themeSwitch.addEventListener("click", () => {
   showTheme();
 });
 showTheme();
+
+const motionSwitch = $("motionSwitch");
+motionSwitch.setAttribute("aria-label", T.nav.motionLabel);
+motionSwitch.setAttribute("aria-checked", String(!reduceMotion));
+motionSwitch.addEventListener("click", () => { // the page is rebuilt in the other mode
+  try { localStorage.setItem("motion", reduceMotion ? "full" : "calm"); } catch (e) { /* storage can be blocked */ }
+  root.dataset.motion = reduceMotion ? "full" : "calm";
+  location.reload();
+});
 startSky($("stars"), reduceMotion);
 
 // ---------- her moon ----------
@@ -367,7 +376,7 @@ const signatureLine = drawSignature($("signature"));
 // ---------- scroll scenes (GSAP ScrollTrigger) ----------
 // Each followed thing gets a number from 0 to 1 that glides after the scroll.
 const gsap = window.gsap, ScrollTrigger = window.ScrollTrigger;
-const animated = !reduceMotion && Boolean(gsap && ScrollTrigger);
+const animated = Boolean(gsap && ScrollTrigger);
 function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
 
 const RANGES = { // where each kind of motion starts and ends: "part of the thing" + "part of the screen"
@@ -414,7 +423,7 @@ flowers.forEach((flower) => {
 });
 
 if (!animated) {
-  // Animations are turned off on this device (or the animation files did not load): show everything finished.
+  // The animation files did not load: show everything finished.
   followed.forEach((f) => f.apply(f.mode === "out" ? 0 : 1));
   root.style.setProperty("--page", 1);
 } else {
@@ -423,6 +432,7 @@ if (!animated) {
   const top = (node) => node.getBoundingClientRect().top + window.scrollY;
   followed.sort((a, b) => top(a.node) - top(b.node)); // ScrollTrigger wants them made in page order
   followed.forEach((f) => {
+    if (reduceMotion && (f.mode === "pin" || f.mode === "out")) { f.apply(f.mode === "out" ? 0 : 1); return; } // calm mode: no held scenes
     const [start, end, glide] = RANGES[f.mode];
     const state = { p: 0 };
     f.apply(0);
@@ -440,6 +450,7 @@ if (!animated) {
     },
   });
 
+  if (!reduceMotion) {
   // Her name arrives letter by letter, each one turning in from deep space.
   const name = $("heroName");
   const letters = [...name.textContent].map((ch) => el("span", "hero__letter", ch));
@@ -463,6 +474,7 @@ if (!animated) {
     });
     holder.addEventListener("pointerleave", () => { tiltX(0); tiltY(0); });
   });
+  }
 
   // Fonts and pictures can change the page height after it first appears.
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
