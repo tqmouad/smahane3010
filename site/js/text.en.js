@@ -42,6 +42,7 @@ export default {
     nights: "{n} nights before you",
     oneNight: "1 night before you",
     yours: "30 October 2002: your moon",
+    drag: "Slide your finger across the moon to turn it.",
     quote: "وليس في الأرض قمراً كالذي في عيناك",
     quoteMeaning: "\u201cThere is no moon on earth like the one in your eyes.\u201d You wrote it. It is true about you.",
   },
@@ -144,6 +145,7 @@ export default {
   gallery: {
     title: "The artist's wall",
     lead: "The best drawings in this universe are yours, Skyhane.",
+    hint: "Keep scrolling. They turn around you.",
     open: "Open this drawing bigger",
     close: "Close",
     list: [

@@ -1,4 +1,4 @@
-// The star field behind the page: calm stars that stay in place and twinkle, with a shooting star now and then.
+// The star field behind the page: stars twinkle and the whole sky turns very slowly, with a shooting star now and then.
 
 function seeded(seed) {
   let a = seed >>> 0;
@@ -17,7 +17,7 @@ export function startSky(canvas, reduceMotion) {
   const css = getComputedStyle(root);
   const colours = ["--star", "--star", "--star-warm", "--star-cool"].map((name) => css.getPropertyValue(name).trim() || "#fff");
 
-  let w = 0, h = 0, stars = [], shooting = null, nextShot = 4000, running = false;
+  let w = 0, h = 0, field = 0, stars = [], shooting = null, nextShot = 4000, running = false;
 
   function build() {
     const ratio = Math.min(window.devicePixelRatio || 1, 2);
@@ -25,7 +25,8 @@ export function startSky(canvas, reduceMotion) {
     canvas.width = Math.round(w * ratio); canvas.height = Math.round(h * ratio);
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
     const rnd = seeded(30102002); // her birthday, so her sky is always the same sky
-    const count = Math.min(700, Math.round((w * h) / 2300));
+    field = Math.hypot(w, h * 1.25) + 700; // big enough that turning and scrolling never leave an empty corner
+    const count = Math.min(2600, Math.round((field * field * 3.14159) / 5200));
     stars = [];
     for (let i = 0; i < count; i++) {
       stars.push({
@@ -39,9 +40,18 @@ export function startSky(canvas, reduceMotion) {
 
   function draw(time) {
     ctx.clearRect(0, 0, w, h);
-    for (const s of stars) { // normal stars: they stay in place and only twinkle
+    // The whole sky turns very slowly around a point above the screen, like the real night sky.
+    // Stars also sit at three depths, so nearer ones slide a little more when the page scrolls.
+    const turn = reduceMotion ? 0 : time * 0.0000085;
+    const scroll = reduceMotion ? 0 : (window.scrollY || 0);
+    const pivotX = w * 0.5, pivotY = -h * 0.25;
+    for (const s of stars) {
+      const angle = s.x * 3.14159 + turn;
+      const reach = (0.06 + (s.y * 0.5 + 0.5) * 0.94) * field;
+      const px = pivotX + Math.cos(angle) * reach;
+      const py = pivotY + Math.sin(angle) * reach - scroll * (0.01 + s.z * 0.035);
+      if (px < -8 || px > w + 8 || py < -8 || py > h + 8) continue;
       const twinkle = reduceMotion ? 0.85 : 0.55 + 0.45 * Math.sin(s.phase + (time / 1000) * s.speed);
-      const px = (s.x * 0.5 + 0.5) * w, py = (s.y * 0.5 + 0.5) * h;
       const r = s.size * (0.6 + s.z * 0.5);
       ctx.globalAlpha = twinkle * (0.4 + s.z * 0.6);
       ctx.fillStyle = s.colour;

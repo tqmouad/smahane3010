@@ -513,3 +513,36 @@ canvas.bigmoon { display: block; aspect-ratio: 1; height: auto; filter: none; tr
 /* fact cards tip up as their section arrives */
 .reveal > .facts { perspective: 900px; }
 .reveal .fact { transform: rotateX(calc((1 - var(--in, 1)) * 38deg)); transform-origin: 50% 100%; }
+
+/* ---------- her drawings in a 3D ring, the moon she can turn, and things arriving one by one ---------- */
+
+.pin--wall { --pin-length: var(--pin-wall); }
+.ring-stage { --w: min(52vw, 30vh, 15rem); width: 100%; height: calc(var(--w) * 1.45); display: grid; place-items: center; perspective: 1000px; }
+.ring {
+  --step: calc(360deg / var(--count, 6));
+  position: relative; width: var(--w); height: calc(var(--w) * 1.3); transform-style: preserve-3d;
+  transform: translateZ(calc(var(--w) * -1.05)) rotateX(-6deg) rotateY(calc(var(--p) * (var(--count, 6) - 1) * var(--step) * -1)) scale(calc(0.55 + clamp(0, calc(var(--p) * 8), 1) * 0.45));
+}
+.ring__item {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  transform: rotateY(calc(var(--i) * var(--step))) translateZ(calc(var(--w) * 1.05));
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.ring__item .frame { transform: none; opacity: 1; }
+.ring__item .frame img { max-height: calc(var(--w) * 1.2); width: auto; max-width: 100%; margin: 0 auto; }
+.ring__item .frame:hover, .ring__item .frame:focus-visible { transform: scale(1.04); box-shadow: 0 0 2.5rem var(--glow); }
+
+canvas.bigmoon { touch-action: pan-y; cursor: grab; }
+.moon__drag { font-size: var(--size-small); font-style: italic; color: var(--ink-soft); opacity: clamp(0, calc(var(--p) * 6 - 4.6), 1); }
+
+/* cards arrive one after another instead of all at once */
+.reveal .fact { --k: 0; opacity: clamp(0, calc(var(--in, 1) * 4.2 - var(--k)), 1); transform: translateY(calc(clamp(0, calc(1 - (var(--in, 1) * 4.2 - var(--k))), 1) * 3rem)) rotateX(calc(clamp(0, calc(1 - (var(--in, 1) * 4.2 - var(--k))), 1) * 55deg)); }
+.reveal .fact:nth-child(2) { --k: 0.9; }
+.reveal .fact:nth-child(3) { --k: 1.8; }
+.reveal .fact:nth-child(4) { --k: 2.7; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ring-stage { height: auto; perspective: none; }
+  .ring { width: 100%; height: auto; transform: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+  .ring__item { position: static; transform: none; }
+}

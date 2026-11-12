@@ -51,6 +51,7 @@
   --pin-moon: 260vh;
   --pin-days: 210vh;
   --pin-scorpio: 280vh;
+  --pin-wall: 380vh;
 
   /* motion */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);

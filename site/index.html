@@ -73,6 +73,7 @@
 <canvas class="bigmoon" id="moonGlobe" width="420" height="420" role="img"></canvas>
         </div>
         <p class="hand moon__when" id="moonWhen" aria-hidden="true"></p>
+        <p class="moon__drag" data-t="moon.drag"></p>
         <h2 id="moonTitle" data-t="moon.title"></h2>
       </div>
     </section>
@@ -130,10 +131,15 @@
       <div class="voice" aria-hidden="true" id="voiceBars"></div>
     </section>
 
-    <section class="block reveal" aria-labelledby="galleryTitle">
-      <h2 id="galleryTitle" data-t="gallery.title"></h2>
-      <p class="lead" data-t="gallery.lead"></p>
-      <ul class="gallery" id="gallery"></ul>
+    <section class="pin pin--wall" aria-labelledby="galleryTitle">
+      <div class="pin__stick" id="wallScene">
+        <h2 id="galleryTitle" data-t="gallery.title"></h2>
+        <p class="lead" data-t="gallery.lead"></p>
+        <div class="ring-stage">
+          <ul class="ring" id="gallery"></ul>
+        </div>
+        <p class="hand" data-t="gallery.hint"></p>
+      </div>
     </section>
 
     <section class="block block--center reveal" aria-labelledby="portraitTitle">

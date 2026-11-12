@@ -75,13 +75,30 @@ const moonCanvas = $("moonGlobe");
 moonCanvas.setAttribute("aria-label", T.moon.alt);
 const moonTint = getComputedStyle(root).getPropertyValue("--moon-rgb").split(",").map(Number);
 const renderGlobe = createGlobe(moonCanvas, "img/moon-map.jpg", moonTint);
+const hand = { spin: 0 }; // extra turn added by her finger
+let moonAt = 0;
 function showMoon(p) { // p goes from 0 to 1: the globe turns to face her, then wanes from full to her moon
-  const spin = (1 - clamp(p / 0.22)) * 1.9;
+  moonAt = p;
+  const spin = (1 - clamp(p / 0.22)) * 1.9 + hand.spin;
   const t = clamp((p - 0.18) / 0.67);
   renderGlobe(t * FINAL_ANGLE, spin);
   const nights = Math.round(NIGHTS_FROM_FULL * (1 - t));
   $("moonWhen").textContent =
     t <= 0.02 ? T.moon.full : nights > 1 ? fill(T.moon.nights, { n: nights }) : nights === 1 ? T.moon.oneNight : T.moon.yours;
+}
+
+{ // slide a finger (or the mouse) sideways across the moon to turn it; it swings back when she lets go
+  let from = null;
+  moonCanvas.addEventListener("pointerdown", (e) => { from = e.clientX - hand.spin * 90; moonCanvas.setPointerCapture(e.pointerId); if (window.gsap) window.gsap.killTweensOf(hand); });
+  moonCanvas.addEventListener("pointermove", (e) => { if (from === null) return; hand.spin = (e.clientX - from) / 90; showMoon(moonAt); });
+  const release = () => {
+    if (from === null) return;
+    from = null;
+    if (window.gsap && !reduceMotion) window.gsap.to(hand, { spin: 0, duration: 2.2, ease: "elastic.out(1, 0.6)", onUpdate: () => showMoon(moonAt) });
+    else { hand.spin = 0; showMoon(moonAt); }
+  };
+  moonCanvas.addEventListener("pointerup", release);
+  moonCanvas.addEventListener("pointercancel", release);
 }
 
 // ---------- counting her days ----------
@@ -298,11 +315,13 @@ function frameFor(art) { // a framed picture that opens bigger when touched
   });
   return button;
 }
-T.gallery.list.forEach((art) => {
-  const li = el("li");
+T.gallery.list.forEach((art, i) => { // her drawings stand in a ring that turns in 3D with the scroll
+  const li = el("li", "ring__item");
+  li.style.setProperty("--i", i);
   li.append(frameFor(art));
   $("gallery").append(li);
 });
+$("gallery").style.setProperty("--count", T.gallery.list.length);
 $("portrait").append(frameFor(T.portrait.art));
 viewer.addEventListener("click", (e) => { if (e.target === viewer) viewer.close(); });
 $("viewerClose").addEventListener("click", () => viewer.close());
@@ -353,7 +372,7 @@ function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
 
 const RANGES = { // where each kind of motion starts and ends: "part of the thing" + "part of the screen"
   pin: ["top top", "bottom bottom", 0.9],
-  in: ["top 98%", "top 62%", 0.7],
+  in: ["top 100%", "top 48%", 0.8],
   read: ["top 92%", "top 48%", 0.5],
   sign: ["top 95%", "top 60%", 0.9],
   out: ["bottom 28%", "bottom top", 0.5],
@@ -370,6 +389,7 @@ pinScene("heroScene");
 pinScene("moonScene", showMoon);
 pinScene("daysScene", showDays);
 pinScene("scorpioScene", showScorpio);
+pinScene("wallScene");
 
 document.querySelectorAll(".reveal").forEach((block) => {
   follow(block, "in", setVar(block, "--in"));
@@ -386,7 +406,7 @@ document.querySelectorAll(".reveal .lead").forEach((lead) => { // split into wor
   lead.style.setProperty("--n", words.length);
   follow(lead, "read", setVar(lead, "--lp"));
 });
-document.querySelectorAll(".song, .gallery li, .portrait, .letter").forEach((node) => follow(node, "in", setVar(node, "--p")));
+document.querySelectorAll(".song, .portrait, .letter").forEach((node) => follow(node, "in", setVar(node, "--p")));
 follow($("signature"), "sign", (p) => { signatureLine.style.strokeDashoffset = 1 - p; $("signature").style.setProperty("--p", p); });
 flowers.forEach((flower) => {
   const stem = flower.querySelector(".flower__stem");
@@ -430,8 +450,8 @@ if (!animated) {
   name.replaceChildren(row);
   gsap.from(letters, { rotationY: -100, z: -500, y: 30, opacity: 0, duration: 1.5, ease: "power3.out", stagger: 0.09, delay: 0.25, transformPerspective: 700 });
 
-  // On a laptop, her drawings and portrait lean in 3D towards the mouse.
-  document.querySelectorAll(".gallery li, .portrait").forEach((holder) => {
+  // On a laptop, her portrait leans in 3D towards the mouse.
+  document.querySelectorAll(".portrait").forEach((holder) => {
     gsap.set(holder, { transformPerspective: 800 });
     const tiltX = gsap.quickTo(holder, "rotationX", { duration: 0.5, ease: "power3" });
     const tiltY = gsap.quickTo(holder, "rotationY", { duration: 0.5, ease: "power3" });
