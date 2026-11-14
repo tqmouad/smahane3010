@@ -116,3 +116,13 @@ Cache tags bumped to ?v=11.
 Checked (Chrome via Playwright, 390/820/1440 widths): no console errors, no sideways scroll,
 calm mode writes the moves out as a story, night + golden themes, wheel and chess at all sizes.
 NOT checked: real iPhone/laptop, Safari, Firefox, screen readers, the live Cloudflare site.
+
+## v12 — 14 Nov 2026: real 3D chessboard (branch build/v12-real-3d-chess)
+- js/chess.js rewritten: every piece is a real 3D turned shape (pawn, rook, bishop, queen, king with a cross),
+  lit by one light with shine, rim glow and soft shadows; wooden frame with bevel and a–h / 1–8 letters;
+  glossy board; 16 still pieces so it looks like a real game (they never block the story moves).
+- Her face and his face sit in gold medallions on the queen and the king; the queen has a pearl crown.
+- The camera keeps a small angle, and zooms in on the two of them at "Checkmate".
+- Board canvas is bigger (min(52vh, 30rem)). Cache tags ?v=12. Still no 3D library.
+Checked in Chrome (390px and 1440px), both skies: no console errors, no sideways scroll.
+NOT checked: real iPhone speed, Safari.
