@@ -126,3 +126,12 @@ NOT checked: real iPhone/laptop, Safari, Firefox, screen readers, the live Cloud
 - Board canvas is bigger (min(52vh, 30rem)). Cache tags ?v=12. Still no 3D library.
 Checked in Chrome (390px and 1440px), both skies: no console errors, no sideways scroll.
 NOT checked: real iPhone speed, Safari.
+
+## v13 — 14 Nov 2026: premium chessboard (branch build/v13-premium-chess)
+- Marble squares with long veins (drawn once into a hidden picture, laid on the board in small triangles).
+- Dark lacquered frame with two gold lines, a gold line on the sides, engraved gold letters.
+- Reflections of the pieces in the board; soft spotlight; a shadow under the whole board.
+- Metal-gold pieces (her side) and glossy porcelain (his side); smoother, rounder pieces; gold cross on the king; pearl crown.
+- Soft faded edges on the canvas. New board colours in tokens.css. Cache tags ?v=13.
+Checked in Chrome (390px, 1440px), both skies: no console errors, no sideways scroll.
+NOT checked: real iPhone speed (this version draws more), Safari.
