@@ -631,7 +631,7 @@ canvas.bigmoon { touch-action: pan-y; cursor: grab; }
 /* the chessboard */
 .chess { gap: var(--space-1); }
 .chess__lead { max-width: 26rem; font-size: clamp(1rem, 2.4vw, 1.2rem); }
-.chess__board { display: block; width: min(100%, 40rem); height: min(44vh, 26rem); touch-action: pan-y; cursor: grab; }
+.chess__board { display: block; width: min(100%, 44rem); height: min(52vh, 30rem); touch-action: pan-y; cursor: grab; }
 .chess__moves { display: grid; width: min(100%, 34rem); min-height: 8.5rem; padding: 0; text-align: center; }
 .chess__move {
   grid-area: 1 / 1; align-self: start;
