@@ -116,9 +116,9 @@
   --moon-rgb: 253, 246, 220;
   --focus: #ffe9a8;
   /* chessboard and chart */
-  --board-light: #c9d1f3;
-  --board-dark: #2f3680;
-  --board-edge: #0f1346;
+  --board-light: #ece7dc;
+  --board-dark: #1a1f35;
+  --board-edge: #0a0c18;
   --board-glow: rgba(246, 201, 122, ALPHA);
   --piece-her: #f0b94d;
   --piece-his: #f8f3e6;
@@ -147,9 +147,9 @@
   --moon-rgb: 255, 250, 240;
   --focus: #1d1642;
   /* chessboard and chart */
-  --board-light: #fff1d6;
-  --board-dark: #b0603a;
-  --board-edge: #5a2a1a;
+  --board-light: #f3ebdc;
+  --board-dark: #2a1d1a;
+  --board-edge: #140c0a;
   --board-glow: rgba(255, 190, 110, ALPHA);
   --piece-her: #e9a93a;
   --piece-his: #fffaf0;

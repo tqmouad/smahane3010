@@ -1,10 +1,10 @@
-import T from "./text.en.js?v=12";
-import FULL_MOONS from "./fullmoons.js?v=12";
-import { startSky } from "./sky.js?v=12";
-import { createGlobe } from "./moon.js?v=12";
-import { CHART } from "./skydata.js?v=12";
-import { drawChart, counts, signOf, degreeIn, houseOf } from "./chart.js?v=12";
-import { createChess, MOVES, notation, activeMove } from "./chess.js?v=12";
+import T from "./text.en.js?v=13";
+import FULL_MOONS from "./fullmoons.js?v=13";
+import { startSky } from "./sky.js?v=13";
+import { createGlobe } from "./moon.js?v=13";
+import { CHART } from "./skydata.js?v=13";
+import { drawChart, counts, signOf, degreeIn, houseOf } from "./chart.js?v=13";
+import { createChess, MOVES, notation, activeMove } from "./chess.js?v=13";
 
 // ---------- facts about her day (see docs/BIRTH_SKY.md) ----------
 const BIRTH = Date.UTC(2002, 9, 30, 17, 0, 0); // 5:00 pm in Morocco, which was on UTC that day
